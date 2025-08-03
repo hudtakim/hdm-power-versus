@@ -126,8 +126,10 @@ socket.on('updateGame', (data) => {
 });
 
 socket.on('gameOver', (data) => {
+    stopTimer(intervalId);
+    startRematchCountdown(document.getElementById('rematchSameBtn'));
     let state = data.state;
-    let role = data.role;
+    //let role = data.role;
     updateVisuals(data.state);
 
     const myPlayer = state.players[socket.id];
@@ -170,9 +172,6 @@ socket.on('gameOver', (data) => {
         newElement.style.transform = `scale(${1 + avgScaler})`;
         arena.appendChild(newElement);
     }
-
-    stopTimer(intervalId);
-    startRematchCountdown(document.getElementById('rematchSameBtn'));
 });
 
 socket.on('resetGame', (data) => {
