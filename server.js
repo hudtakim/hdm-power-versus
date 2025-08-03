@@ -88,8 +88,8 @@ io.on('connection', (socket) => {
         const opponent = rooms[room].players[opponentId];
 
         if (player.scaler < maxScaler) {
-            player.scaler = Math.min(maxScaler, player.scaler + 0.2);
-            player.step = Math.min(baseStep + (maxScaler - baseScaler), player.step + 0.2);
+            player.scaler = Math.min(maxScaler, player.scaler + 0.1);
+            player.step = Math.min(baseStep + (maxScaler - baseScaler), player.step + 0.1);
             opponent.step = Math.min(baseStep + (maxScaler - baseScaler), opponent.step - 0.02);
         }
 
