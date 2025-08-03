@@ -1,0 +1,152 @@
+html{
+  overflow: hidden;
+}
+
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background-color: #111;
+  color: white;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  overflow: hidden;
+}
+
+#arena {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  margin: 40px;
+  position: relative;
+  background-color: gainsboro;
+}
+
+.player {
+  position: relative;
+  width: 60px;
+
+}
+
+.energy {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  position: absolute;
+  transform: translateY(-50%);
+}
+
+#energy1 {
+  left: calc(100% - 30px);
+  opacity: 80%;
+}
+
+#energy2 {
+  right: calc(100% - 30px);
+  opacity: 80%;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  margin-top: 20px;
+  user-select: none;
+  margin: 0 0.4rem;
+}
+
+#tapBtn:disabled, #powerBtn:disabled, #rematchSameBtn:disabled, #rematch:disabled{
+  color: light-dark(rgba(16, 16, 16, 0.5), rgba(255, 255, 255, 0.5));
+  background-color: light-dark(rgba(239, 239, 239, 0.7), rgba(19, 1, 1, 0.3)) !important;
+}
+
+/* Mendefinisikan animasi glowing */
+@keyframes glowing1 {
+    0% {
+        box-shadow: 0 0 5px 2px #8a2be2,   /* Cahaya awal */
+                    0 0 20px 4px #9932cc;
+    }
+    50% {
+        box-shadow: 0 0 20px 8px #8a2be2,   /* Cahaya membesar di tengah animasi */
+                    0 0 40px 16px #9932cc,
+                    0 0 80px 24px #da70d6; /* Tambahan cahaya warna lain */
+    }
+    100% {
+        box-shadow: 0 0 5px 2px #8a2be2,   /* Kembali ke cahaya awal */
+                    0 0 20px 4px #9932cc;
+    }
+}
+
+/* Mendefinisikan animasi glowing */
+@keyframes glowing2 {
+    0% {
+        box-shadow: 0 0 5px 2px #42a5f5,   /* Cahaya awal: biru muda */
+                    0 0 20px 4px #1976d2;  /* Biru sedang */
+    }
+    50% {
+        box-shadow: 0 0 20px 8px #42a5f5,   /* Cahaya membesar: biru muda */
+                    0 0 40px 16px #1976d2,  /* Biru sedang */
+                    0 0px 80px 24px #e3f2fd; /* Tambahan cahaya warna biru sangat terang */
+    }
+    100% {
+        box-shadow: 0 0 5px 2px #42a5f5,   /* Kembali ke cahaya awal */
+                    0 0 20px 4px #1976d2;
+    }
+}
+
+/* Gaya dasar untuk lingkaran */
+#energy1 {
+    background-color: #ffffff; /* Warna lingkaran putih */
+    /* Menerapkan animasi pada lingkaran */
+    animation: glowing1 2s ease-in-out infinite; /* Nama animasi, durasi, timing, dan jumlah iterasi */
+}
+
+/* Gaya dasar untuk lingkaran */
+#energy2 {
+    background-color: #ffffff; /* Warna lingkaran putih */
+    /* Menerapkan animasi pada lingkaran */
+    animation: glowing2 2s ease-in-out infinite; /* Nama animasi, durasi, timing, dan jumlah iterasi */
+}
+
+@keyframes explode2 {
+    0% {
+    transform: scale(1) translate(0%, 0%);
+    opacity: 1;
+    }
+    100% {
+    transform: scale(10) translate(0%, 0%); /* A slightly bigger explosion */
+    opacity: 0.1;
+    }
+}
+
+@keyframes explode1 {
+    0% {
+    transform: scale(1) translate(0%, 0%);
+    opacity: 1;
+    }
+    100% {
+    transform: scale(10) translate(0%, 0%); /* A slightly bigger explosion */
+    opacity: 0.1;
+    }
+  }
+
+.crackLeft {
+  background-image: url('/crack-img.png');
+  background-size: cover;
+  width: 200px;
+  height: 200px;
+  z-index: 9999;
+  position: absolute;
+  top: 20%;
+  left: -75px
+}
+
+.crackRight {
+  background-image: url('/crack-img.png');
+  background-size: cover;
+  width: 200px;
+  height: 200px;
+  z-index: 9998;
+  position: absolute;
+  right: -75px;
+}

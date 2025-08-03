@@ -1,0 +1,79 @@
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
+app.use(express.static(__dirname + '/public'));
+
+let waitingPlayer = null;
+
+io.on('connection', (socket) => {
+  console.log('New client connected:', socket.id);
+
+  if (waitingPlayer) {
+    const room = `${waitingPlayer.id}#${socket.id}`;
+    socket.join(room);
+    waitingPlayer.join(room);
+
+    io.to(room).emit('startGame', {
+      room,
+      players: {
+        [waitingPlayer.id]: 'Player 1',
+        [socket.id]: 'Player 2'
+      }
+    });
+    waitingPlayer = null;
+  } else {
+    waitingPlayer = socket;
+  }
+
+  socket.on('tap', (room) => {
+    socket.to(room).emit('opponentTap');
+  });
+
+  socket.on('power', (room) => {
+    socket.to(room).emit('opponentPower');
+  });
+
+  socket.on('rematchSame', (room) => {
+    io.to(room).emit('resetGame');
+  });
+
+  socket.on('findNewOpponent', () => {
+    if (waitingPlayer === null) {
+      waitingPlayer = socket;
+    } else if (waitingPlayer.id !== socket.id) {
+      const room = `${waitingPlayer.id}#${socket.id}`;
+      socket.join(room);
+      waitingPlayer.join(room);
+
+      io.to(room).emit('startGame', {
+        room,
+        players: {
+          [waitingPlayer.id]: 'Player 1',
+          [socket.id]: 'Player 2'
+        }
+      });
+      waitingPlayer = null;
+    }
+  });
+
+  socket.on('gameOver', (room) => {
+    socket.to(room).emit('forceGameOver'); // kirim ke lawan
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected:', socket.id);
+    if (waitingPlayer && waitingPlayer.id === socket.id) {
+      waitingPlayer = null;
+    }
+    io.emit('opponentLeft');
+  });
+});
+
+server.listen(3000, () => {
+  console.log('Server listening on http://localhost:3000');
+});
