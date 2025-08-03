@@ -180,8 +180,8 @@ socket.on('resetGame', (data) => {
     document.getElementById('status').textContent = `${role} - Tap Fast!`;
     document.getElementById('rematch').style.display = 'none';
     document.getElementById('rematchSameBtn').style.display = 'none';
-    //document.getElementById('tapBtn').disabled = false;
-    //document.getElementById('powerBtn').disabled = false;
+    document.getElementById('tapBtn').disabled = false;
+    document.getElementById('powerBtn').disabled = false;
     document.getElementById('tapBtn').style.display = 'inline';
     document.getElementById('powerBtn').style.display = 'inline';
     if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
@@ -199,8 +199,8 @@ socket.on('opponentLeft', () => {
     document.getElementById('rematch').style.display = 'inline';
     document.getElementById('tapBtn').style.display = 'none';
     document.getElementById('powerBtn').style.display = 'none';
-    // document.getElementById('tapBtn').disabled = true;
-    // document.getElementById('powerBtn').disabled = true;
+    document.getElementById('tapBtn').disabled = true;
+    document.getElementById('powerBtn').disabled = true;
     stopTimer(intervalId);
 });
 
