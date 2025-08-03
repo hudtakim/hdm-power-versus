@@ -1,0 +1,23 @@
+    socket.on('tap', (room) => {
+        if (!rooms[room]) return;
+
+        const player = rooms[room].players[socket.id];
+        
+        if (player.role === 'Player 1') {
+            rooms[room].pos += player.step;
+        } else {
+            rooms[room].pos -= player.step;
+        }
+        player.tapCount++;
+        
+        // Cek kondisi game over
+        if (rooms[room].pos <= 0 || rooms[room].pos >= 100) {
+            io.to(room).emit('gameOver', { 
+                state: rooms[room],
+                winnerId: socket.id 
+            });
+            //delete rooms[room]; 
+        } else {
+            io.to(room).emit('updateGame', { state: rooms[room] });
+        }
+    });

@@ -67,9 +67,29 @@ io.on('connection', (socket) => {
         
         // Cek kondisi game over
         if (rooms[room].pos <= 0 || rooms[room].pos >= 100) {
+            let winnerId = null; // Inisialisasi winnerId
+
+            if (rooms[room].pos <= 0) {
+                // Jika pos <= 0, pemenangnya adalah Player 2
+                for (const playerId in rooms[room].players) {
+                    if (rooms[room].players[playerId].role === 'Player 2') {
+                        winnerId = playerId;
+                        break;
+                    }
+                }
+            } else if (rooms[room].pos >= 100) {
+                // Jika pos >= 100, pemenangnya adalah Player 1
+                for (const playerId in rooms[room].players) {
+                    if (rooms[room].players[playerId].role === 'Player 1') {
+                        winnerId = playerId;
+                        break;
+                    }
+                }
+            }
+
             io.to(room).emit('gameOver', { 
                 state: rooms[room],
-                winnerId: socket.id 
+                winnerId: winnerId 
             });
             //delete rooms[room]; 
         } else {
