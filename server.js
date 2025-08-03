@@ -82,9 +82,15 @@ io.on('connection', (socket) => {
         if (!rooms[room]) return;
         
         const player = rooms[room].players[socket.id];
+
+        const playerIds = room.split('#');
+        const opponentId = playerIds.find(id => id !== socket.id);
+        const opponent = rooms[room].players[opponentId];
+
         if (player.scaler < maxScaler) {
             player.scaler = Math.min(maxScaler, player.scaler + 0.2);
             player.step = Math.min(baseStep + (maxScaler - baseScaler), player.step + 0.2);
+            opponent.step = Math.min(baseStep + (maxScaler - baseScaler), opponent.step - 0.02);
         }
 
         io.to(room).emit('updateGame', { state: rooms[room] });

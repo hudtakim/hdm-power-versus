@@ -18,7 +18,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 300px;
-  margin: 40px;
+  margin: 40px 15px;
   position: relative;
   background-color: gainsboro;
 }
@@ -39,12 +39,12 @@ body {
 
 #energy1 {
   left: calc(100% - 30px);
-  opacity: 80%;
+  opacity: 60%;
 }
 
 #energy2 {
   right: calc(100% - 30px);
-  opacity: 80%;
+  opacity: 60%;
 }
 
 button {
@@ -53,6 +53,8 @@ button {
   margin-top: 20px;
   user-select: none;
   margin: 0 0.4rem;
+  position: relative;
+  z-index: 99999;
 }
 
 #tapBtn:disabled, #powerBtn:disabled, #rematchSameBtn:disabled, #rematch:disabled{
@@ -108,7 +110,7 @@ button {
     animation: glowing2 2s ease-in-out infinite; /* Nama animasi, durasi, timing, dan jumlah iterasi */
 }
 
-@keyframes explode2 {
+@keyframes explode {
     0% {
     transform: scale(1) translate(0%, 0%);
     opacity: 1;
@@ -118,17 +120,6 @@ button {
     opacity: 0.1;
     }
 }
-
-@keyframes explode1 {
-    0% {
-    transform: scale(1) translate(0%, 0%);
-    opacity: 1;
-    }
-    100% {
-    transform: scale(10) translate(0%, 0%); /* A slightly bigger explosion */
-    opacity: 0.1;
-    }
-  }
 
 .crackLeft {
   background-image: url('/crack-img.png');
@@ -138,7 +129,8 @@ button {
   z-index: 9999;
   position: absolute;
   top: 20%;
-  left: -75px
+  left: -100px;
+  transform: scaleX(-1);
 }
 
 .crackRight {
@@ -148,5 +140,6 @@ button {
   height: 200px;
   z-index: 9998;
   position: absolute;
-  right: -75px;
+  top: 20%;
+  right: -100px;
 }

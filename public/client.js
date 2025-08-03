@@ -63,6 +63,13 @@ function updateVisuals(state) {
     pos = state.pos;
     energy1.style.left = `${pos}%`;
     energy2.style.right = `${100 - pos}%`;
+    if(pos < 50){
+        energy1.style.zIndex = 10;
+        energy2.style.zIndex = 1;
+    }else{
+        energy1.style.zIndex = 1;
+        energy2.style.zIndex = 10;
+    }
 
     // Memperbarui hitungan tap dan scaler
     if (myPlayer) {
@@ -117,7 +124,14 @@ socket.on('updateGame', (data) => {
 });
 
 socket.on('gameOver', (data) => {
+    let state = data.state;
+    let role = data.role;
     updateVisuals(data.state);
+
+    const myPlayer = state.players[socket.id];
+    const opponentId = Object.keys(state.players).find(id => id !== socket.id);
+    const opponentPlayer = state.players[opponentId];
+    let avgScaler = (myPlayer.scaler + opponentPlayer.scaler) / 2;
     
     document.getElementById('tapBtn').disabled = true;
     document.getElementById('powerBtn').disabled = true;
@@ -132,16 +146,24 @@ socket.on('gameOver', (data) => {
 
     // Menggunakan posisi akhir dari server untuk animasi
     if (data.state.pos <= 0) {
-        energy2.style.animation = 'explode1 0.8s ease-out forwards';
+        energy2.style.animation = 'explode 1.2s ease-out forwards';
+        setTimeout(() => {
+            energy1.style.animation = 'explode 1.2s ease-out forwards';
+        }, 300);
         let newElement = document.createElement('div');
         newElement.className = 'crackLeft';
         newElement.id = 'crackLeft';
+        newElement.style.transform = `scale(-${1 + avgScaler})`;
         arena.appendChild(newElement);
     } else if (data.state.pos >= 100) {
-        energy1.style.animation = 'explode2 0.8s ease-out forwards';
+        energy1.style.animation = 'explode 1.2s ease-out forwards';
+        setTimeout(() => {
+            energy2.style.animation = 'explode 1.2s ease-out forwards';
+        }, 300);
         let newElement = document.createElement('div');
         newElement.className = 'crackRight';
         newElement.id = 'crackRight';
+        newElement.style.transform = `scale(${1 + avgScaler})`;
         arena.appendChild(newElement);
     }
 
