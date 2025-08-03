@@ -89,8 +89,8 @@ io.on('connection', (socket) => {
 
         if (player.scaler < maxScaler) {
             player.scaler = Math.min(maxScaler, player.scaler + 0.1);
-            player.step = Math.min(baseStep + (maxScaler - baseScaler), player.step + 0.1);
-            opponent.step = Math.min(baseStep + (maxScaler - baseScaler), opponent.step - 0.02);
+            player.step = player.step + 0.1;
+            opponent.step = opponent.step > 0 ? opponent.step - 0.02 : 0;
         }
 
         io.to(room).emit('updateGame', { state: rooms[room] });

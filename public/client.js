@@ -115,6 +115,8 @@ socket.on('startGame', (data) => {
 
     document.getElementById('rematch').style.display = 'none';
     document.getElementById('rematchSameBtn').style.display = 'none';
+    document.getElementById('tapBtn').style.display = 'inline';
+    document.getElementById('powerBtn').style.display = 'inline';
     document.getElementById('tapBtn').disabled = false;
     document.getElementById('powerBtn').disabled = false;
 });
@@ -133,8 +135,10 @@ socket.on('gameOver', (data) => {
     const opponentPlayer = state.players[opponentId];
     let avgScaler = (myPlayer.scaler + opponentPlayer.scaler) / 2;
     
-    document.getElementById('tapBtn').disabled = true;
-    document.getElementById('powerBtn').disabled = true;
+    //document.getElementById('tapBtn').disabled = true;
+    document.getElementById('tapBtn').style.display = 'none';
+    document.getElementById('powerBtn').style.display = 'none';
+    //document.getElementById('powerBtn').disabled = true;
     document.getElementById('rematchSameBtn').style.display = 'inline';
     
     // Menggunakan data winnerId dari server untuk menentukan menang/kalah
@@ -177,8 +181,10 @@ socket.on('resetGame', (data) => {
     document.getElementById('status').textContent = `${role} - Tap Fast!`;
     document.getElementById('rematch').style.display = 'none';
     document.getElementById('rematchSameBtn').style.display = 'none';
-    document.getElementById('tapBtn').disabled = false;
-    document.getElementById('powerBtn').disabled = false;
+    //document.getElementById('tapBtn').disabled = false;
+    //document.getElementById('powerBtn').disabled = false;
+    document.getElementById('tapBtn').style.display = 'inline';
+    document.getElementById('powerBtn').style.display = 'inline';
     if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
     if(document.getElementById('crackRight')) document.getElementById('crackRight').remove();
     energy1.style.animation = 'glowing1 2s ease-in-out infinite';
@@ -192,8 +198,10 @@ socket.on('opponentLeft', () => {
     document.getElementById('rematchSameBtn').style.display = 'none';
     document.getElementById('status').textContent = 'Opponent left.';
     document.getElementById('rematch').style.display = 'inline';
-    document.getElementById('tapBtn').disabled = true;
-    document.getElementById('powerBtn').disabled = true;
+    document.getElementById('tapBtn').style.display = 'none';
+    document.getElementById('powerBtn').style.display = 'none';
+    // document.getElementById('tapBtn').disabled = true;
+    // document.getElementById('powerBtn').disabled = true;
     stopTimer(intervalId);
 });
 
