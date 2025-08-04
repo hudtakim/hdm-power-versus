@@ -23,8 +23,8 @@ io.on('connection', (socket) => {
         rooms[room] = {
             pos: 50,
             players: {
-                [player1Id]: { id: player1Id, role: 'Player 1', step: baseStep, scaler: baseScaler, tapCount: 0, boost: 1, boostState: false},
-                [player2Id]: { id: player2Id, role: 'Player 2', step: baseStep, scaler: baseScaler, tapCount: 0, boost: 1, boostState: false}
+                [player1Id]: { id: player1Id, role: 'Player 1', step: baseStep, reducer: 0, scaler: baseScaler, tapCount: 0, boost: 1, boostState: false},
+                [player2Id]: { id: player2Id, role: 'Player 2', step: baseStep, reducer: 0, scaler: baseScaler, tapCount: 0, boost: 1, boostState: false}
             }
         };
     };
@@ -67,17 +67,17 @@ io.on('connection', (socket) => {
             rooms[room].pos -= player.step;
         }
 
-        if(player.boostState && player.step > baseStep + player.scaler - baseScaler){ //reduce to base + current scale
+        if(player.boostState && player.step > baseStep + player.scaler - baseScaler - player.reducer){ //reduce to base + current scale
             player.step -= 0.1;
         }
-        if(player.step <= baseStep + player.scaler - baseScaler){
+        if(player.step <= baseStep + player.scaler - baseScaler - player.reducer){
             player.boostState = false;
-            player.step = baseStep + player.scaler - baseScaler;
+            player.step = baseStep + player.scaler - baseScaler - player.reducer;
         }
 
         player.tapCount++;
 
-        opponent.boost += (baseStep + player.scaler - baseScaler) * 0.01;
+        opponent.boost += ((baseStep + player.scaler - baseScaler - player.reducer) * 0.01);
 
         
         // Cek kondisi game over
@@ -126,6 +126,7 @@ io.on('connection', (socket) => {
             player.scaler = Math.min(maxScaler, player.scaler + 0.1);
             player.step = player.step + 0.1;
             opponent.step = opponent.step > 0 ? opponent.step - 0.02 : 0;
+            opponent.reducer += (opponent.step > 0 ? 0.02 : 0);
         }
 
         io.to(room).emit('updateGame', { state: rooms[room] });

@@ -163,8 +163,8 @@ button {
     opacity: 1;
     }
     100% {
-    transform: scale(10) translate(0%, 0%); /* A slightly bigger explosion */
-    opacity: 0.1;
+    transform: scale(20) translate(0%, 0%); /* A slightly bigger explosion */
+    opacity: 0;
     }
 }
 
