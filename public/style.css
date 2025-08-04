@@ -29,6 +29,39 @@ body {
   width: 60px;
 
 }
+/*
+.energy-wrapper{
+  position: relative;
+}
+
+
+#energyWrapper1 {
+  animation: slideIn1 1s forwards;
+}
+
+#energyWrapper2 {
+  animation: slideIn2 1s forwards;
+} */
+
+/* Define the keyframes for the animation. */
+@keyframes slideIn1 {
+  0% {
+    right: -50%; /* Start off-screen to the left */
+  }
+  100% {
+    right: calc(0% - 30px); /* Move to its original position */
+  }
+}
+
+/* Define the keyframes for the animation. */
+@keyframes slideIn2 {
+  0% {
+    left: -50%; /* Start off-screen to the left */
+  }
+  100% {
+    left: calc(0% - 30px); /* Move to its original position */
+  }
+}
 
 .energy {
   width: 30px;
@@ -39,12 +72,12 @@ body {
 
 #energy1 {
   left: calc(100% - 30px);
-  opacity: 70%;
+  opacity: 65%;
 }
 
 #energy2 {
   right: calc(100% - 30px);
-  opacity: 70%;
+  opacity: 65%;
 }
 
 button {

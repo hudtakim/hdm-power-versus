@@ -53,6 +53,14 @@ function resetTimer() {
     document.getElementById("elapsed").textContent = "00:00:00";
 }
 
+function roundDownToOneDecimal(number) {
+  // Multiply by 10 to shift the first decimal digit to the left.
+  const multiplied = number * 10;
+  const floored = Math.floor(multiplied);
+  const result = floored / 10;
+  return result;
+}
+
 function updateVisuals(state) {
     // Cari data pemain kita dan lawan dari objek state
     const myPlayer = state.players[socket.id];
@@ -63,13 +71,6 @@ function updateVisuals(state) {
     pos = state.pos;
     energy1.style.left = `${pos}%`;
     energy2.style.right = `${100 - pos}%`;
-    if(pos < 50){
-        energy1.style.zIndex = 10;
-        energy2.style.zIndex = 1;
-    }else{
-        energy1.style.zIndex = 1;
-        energy2.style.zIndex = 10;
-    }
 
     // Memperbarui hitungan tap dan scaler
     if (myPlayer) {
@@ -79,9 +80,34 @@ function updateVisuals(state) {
         if(myPlayer.boost >= 1.5 && !myPlayer.boostState){ //need 50 tap from opponent to achieve this
             document.getElementById('boostBtn').disabled = false;
         }
+        document.getElementById('boostBtn').textContent = `Boost (X${roundDownToOneDecimal(myPlayer.boost)})`;
     }
     if (opponentPlayer) {
         opponentScaler = opponentPlayer.scaler;
+    }
+
+    if(role === 'Player 1'){
+        if(myScaler > opponentScaler){
+            energy1.style.zIndex = 10;
+            energy2.style.zIndex = 1;
+        }else if(myScaler < opponentScaler){
+            energy1.style.zIndex = 1;
+            energy2.style.zIndex = 10;
+        }else{
+            energy1.style.zIndex = 1;
+            energy2.style.zIndex = 1;
+        }
+    }else{
+        if(myScaler > opponentScaler){
+            energy1.style.zIndex = 1;
+            energy2.style.zIndex = 10;
+        }else if(myScaler < opponentScaler){
+            energy1.style.zIndex = 10;
+            energy2.style.zIndex = 1;
+        }else{
+            energy1.style.zIndex = 1;
+            energy2.style.zIndex = 1;
+        }
     }
     
     // Memperbarui visual orb berdasarkan peran
@@ -215,6 +241,7 @@ socket.on('resetGame', (data) => {
     document.getElementById('rematchSameBtn').style.display = 'none';
     document.getElementById('tapBtn').disabled = false;
     document.getElementById('powerBtn').disabled = false;
+    document.getElementById('boostBtn').disabled = true;
     document.getElementById('tapBtn').style.display = 'inline';
     document.getElementById('powerBtn').style.display = 'inline';
     document.getElementById('boostBtn').style.display = 'inline';
