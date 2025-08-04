@@ -11,6 +11,7 @@ body {
   padding: 0;
   user-select: none;
   overflow: hidden;
+  height: 100vh;
 }
 
 #arena {
@@ -39,12 +40,12 @@ body {
 
 #energy1 {
   left: calc(100% - 30px);
-  opacity: 60%;
+  opacity: 70%;
 }
 
 #energy2 {
   right: calc(100% - 30px);
-  opacity: 60%;
+  opacity: 70%;
 }
 
 button {
@@ -57,7 +58,7 @@ button {
   z-index: 99999;
 }
 
-#tapBtn:disabled, #powerBtn:disabled, #rematchSameBtn:disabled, #rematch:disabled{
+#tapBtn:disabled, #powerBtn:disabled, #rematchSameBtn:disabled, #rematch:disabled, #boostBtn:disabled{
   color: light-dark(rgba(16, 16, 16, 0.5), rgba(255, 255, 255, 0.5));
   background-color: light-dark(rgba(239, 239, 239, 0.7), rgba(19, 1, 1, 0.3)) !important;
 }
@@ -93,6 +94,52 @@ button {
     100% {
         box-shadow: 0 0 5px 2px #42a5f5,   /* Kembali ke cahaya awal */
                     0 0 20px 4px #1976d2;
+    }
+}
+
+/* Mendefinisikan animasi glowing */
+@keyframes boost1 {
+    0% {
+        border: 1px solid red;
+        box-sizing: border-box;
+        box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
+                    0 0 20px 10px #9932cc;
+    }
+    50% {
+        border: 1px solid red;
+        box-sizing: border-box;
+        box-shadow: 0 0 20px 15px #860404,   /* Cahaya membesar: biru muda */
+                    0 0 60px 45px #9932cc,
+                    0 0 80px 24px #da70d6; /* Tambahan cahaya warna lain */
+    }
+    100% {
+        border: 1px solid red;
+        box-sizing: border-box;
+        box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
+                    0 0 20px 10px #9932cc;
+    }
+}
+
+/* Mendefinisikan animasi glowing */
+@keyframes boost2 {
+    0% {
+        border: 1px solid red;
+        box-sizing: border-box;
+        box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
+                    0 0 20px 10px #1976d2;  /* Biru sedang */
+    }
+    50% {
+        border: 1px solid red;
+        box-sizing: border-box;
+        box-shadow: 0 0 20px 15px #860404,   /* Cahaya membesar: biru muda */
+                    0 0 60px 45px #1976d2,  /* Biru sedang */
+                    0 0px 80px 24px #1976d2;/* Tambahan cahaya warna biru sangat terang */
+    }
+    100% {
+        border: 1px solid red;
+        box-sizing: border-box;
+        box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
+                    0 0 20px 10px #1976d2;  /* Biru sedang */
     }
 }
 

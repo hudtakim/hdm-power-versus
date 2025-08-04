@@ -76,6 +76,9 @@ function updateVisuals(state) {
         tapCount = myPlayer.tapCount;
         myScaler = myPlayer.scaler;
         document.getElementById('tapCount').textContent = tapCount;
+        if(myPlayer.boost >= 1.5 && !myPlayer.boostState){ //need 50 tap from opponent to achieve this
+            document.getElementById('boostBtn').disabled = false;
+        }
     }
     if (opponentPlayer) {
         opponentScaler = opponentPlayer.scaler;
@@ -85,9 +88,34 @@ function updateVisuals(state) {
     if (role === 'Player 1') {
         energy1.style.transform = `scale(${1 + opponentScaler})`;
         energy2.style.transform = `scale(${1 + myScaler})`;
+        if(myPlayer.boostState && energy2.style.animation !== 'boost2 2s ease-in-out infinite'){
+            energy2.style.animation = 'boost2 2s ease-in-out infinite';
+        }else if(energy2.style.animation !== 'glowing2 2s ease-in-out infinite'){
+            energy2.style.animation = 'glowing2 2s ease-in-out infinite';
+        }
+        
+        if(opponentPlayer.boostState && energy1.style.animation !== 'boost1 2s ease-in-out infinite'){
+            energy1.style.animation = 'boost1 2s ease-in-out infinite';
+        }else if(energy1.style.animation !== 'glowing1 2s ease-in-out infinite'){
+            energy1.style.animation = 'glowing1 2s ease-in-out infinite';
+        }
+        
+       // energy2.style.animation = 'boost2 2s ease-in-out infinite';
     } else { // Player 2
         energy1.style.transform = `scale(${1 + myScaler})`;
         energy2.style.transform = `scale(${1 + opponentScaler})`;
+
+        if(myPlayer.boostState && energy1.style.animation !== 'boost1 2s ease-in-out infinite'){
+            energy1.style.animation = 'boost1 2s ease-in-out infinite';
+        }else if(energy1.style.animation !== 'glowing1 2s ease-in-out infinite'){
+            energy1.style.animation = 'glowing1 2s ease-in-out infinite';
+        }
+        
+        if(opponentPlayer.boostState && energy2.style.animation !== 'boost2 2s ease-in-out infinite'){
+            energy2.style.animation = 'boost2 2s ease-in-out infinite';
+        }else if(energy2.style.animation !== 'glowing2 2s ease-in-out infinite'){
+            energy2.style.animation = 'glowing2 2s ease-in-out infinite';
+        }
     }
 
     if(myScaler >= 5)  document.getElementById('powerBtn').disabled = true;
@@ -119,8 +147,10 @@ socket.on('startGame', (data) => {
     document.getElementById('rematchSameBtn').style.display = 'none';
     document.getElementById('tapBtn').style.display = 'inline';
     document.getElementById('powerBtn').style.display = 'inline';
+    document.getElementById('boostBtn').style.display = 'inline';
     document.getElementById('tapBtn').disabled = false;
     document.getElementById('powerBtn').disabled = false;
+    document.getElementById('boostBtn').disabled = true;
 });
 
 socket.on('updateGame', (data) => {
@@ -142,6 +172,7 @@ socket.on('gameOver', (data) => {
     //document.getElementById('tapBtn').disabled = true;
     document.getElementById('tapBtn').style.display = 'none';
     document.getElementById('powerBtn').style.display = 'none';
+    document.getElementById('boostBtn').style.display = 'none';
     //document.getElementById('powerBtn').disabled = true;
     document.getElementById('rematchSameBtn').style.display = 'inline';
     
@@ -186,6 +217,7 @@ socket.on('resetGame', (data) => {
     document.getElementById('powerBtn').disabled = false;
     document.getElementById('tapBtn').style.display = 'inline';
     document.getElementById('powerBtn').style.display = 'inline';
+    document.getElementById('boostBtn').style.display = 'inline';
     energy1.style.animation = 'glowing1 2s ease-in-out infinite';
     energy2.style.animation = 'glowing2 2s ease-in-out infinite';
     if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
@@ -201,8 +233,10 @@ socket.on('opponentLeft', () => {
     document.getElementById('rematch').style.display = 'inline';
     document.getElementById('tapBtn').style.display = 'none';
     document.getElementById('powerBtn').style.display = 'none';
+    document.getElementById('boostBtn').style.display = 'none';
     document.getElementById('tapBtn').disabled = true;
     document.getElementById('powerBtn').disabled = true;
+    document.getElementById('boostBtn').disabled = true;
     stopTimer(intervalId);
 });
 
@@ -216,6 +250,12 @@ document.getElementById('tapBtn').addEventListener('click', () => {
 document.getElementById('powerBtn').addEventListener('click', () => {
     if (!room) return;
     socket.emit('power', room);
+});
+
+document.getElementById('boostBtn').addEventListener('click', () => {
+    if (!room) return;
+    document.getElementById('boostBtn').disabled = true;
+    socket.emit('boost', room);
 });
 
 document.getElementById('rematch').addEventListener('click', () => {

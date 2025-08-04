@@ -23,8 +23,8 @@ io.on('connection', (socket) => {
         rooms[room] = {
             pos: 50,
             players: {
-                [player1Id]: { id: player1Id, role: 'Player 1', step: baseStep, scaler: baseScaler, tapCount: 0 },
-                [player2Id]: { id: player2Id, role: 'Player 2', step: baseStep, scaler: baseScaler, tapCount: 0 }
+                [player1Id]: { id: player1Id, role: 'Player 1', step: baseStep, scaler: baseScaler, tapCount: 0, boost: 1, boostState: false},
+                [player2Id]: { id: player2Id, role: 'Player 2', step: baseStep, scaler: baseScaler, tapCount: 0, boost: 1, boostState: false}
             }
         };
     };
@@ -63,7 +63,24 @@ io.on('connection', (socket) => {
         } else {
             rooms[room].pos -= player.step;
         }
+
+        if(player.boostState && player.step > baseStep + player.scaler - baseScaler){ //reduce to base + current scale
+            player.step -= 0.1;
+        }
+        if(player.step <= baseStep + player.scaler - baseScaler){
+            player.boostState = false;
+            player.step = baseStep + player.scaler - baseScaler;
+        }
+
         player.tapCount++;
+
+
+        const playerIds = room.split('#');
+        const opponentId = playerIds.find(id => id !== socket.id);
+        const opponent = rooms[room].players[opponentId];
+
+        opponent.boost += 0.02;
+
         
         // Cek kondisi game over
         if (rooms[room].pos <= 0 || rooms[room].pos >= 100) {
@@ -112,6 +129,17 @@ io.on('connection', (socket) => {
             player.step = player.step + 0.1;
             opponent.step = opponent.step > 0 ? opponent.step - 0.02 : 0;
         }
+
+        io.to(room).emit('updateGame', { state: rooms[room] });
+    });
+
+        // --- Menangani aksi 'boost' dari client ---
+    socket.on('boost', (room) => {
+        if (!rooms[room]) return;
+        const player = rooms[room].players[socket.id];
+        player.step = player.step * player.boost;
+        player.boostState = true;
+        player.boost = 1;
 
         io.to(room).emit('updateGame', { state: rooms[room] });
     });

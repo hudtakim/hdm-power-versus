@@ -8,13 +8,16 @@
 </head>
 <body>
   <h1 id="status">Waiting for opponent...</h1>
-  <h3 id="timer">Elapsed time: <span id="elapsed">00:00:00</span><span> - Tap count: </span><span id="tapCount">0</span></h3>
+  <h4 id="timer">Elapsed time: <span id="elapsed">00:00:00</span><span> - Tap count: </span><span id="tapCount">0</span></h4>
   <div id="arena">
     <div class="energy" id="energy1"></div>
     <div class="energy" id="energy2"></div>
   </div>
+  
+  <button id="boostBtn" disabled>Boost</button>
+  <button id="powerBtn" disabled>Charge</button>
   <button id="tapBtn" disabled>Push</button>
-  <button id="powerBtn" disabled>Power Up</button>
+  
   <button id="rematchSameBtn" style="display: none;">Rematch</button>
   <button id="rematch" style="display: none">Find New Opponent</button>
   <script src="/socket.io/socket.io.js"></script>
