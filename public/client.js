@@ -103,6 +103,8 @@ socket.on('startGame', (data) => {
 
     if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
     if(document.getElementById('crackRight')) document.getElementById('crackRight').remove();
+    energy1.style.animation = 'glowing1 2s ease-in-out infinite';
+    energy2.style.animation = 'glowing2 2s ease-in-out infinite';
     
     updateVisuals(data.state);
 
@@ -155,7 +157,7 @@ socket.on('gameOver', (data) => {
         energy2.style.animation = 'explode 1.2s ease-out forwards';
         setTimeout(() => {
             energy1.style.animation = 'explode 1.2s ease-out forwards';
-        }, 300);
+        }, 200);
         let newElement = document.createElement('div');
         newElement.className = 'crackLeft';
         newElement.id = 'crackLeft';
@@ -165,7 +167,7 @@ socket.on('gameOver', (data) => {
         energy1.style.animation = 'explode 1.2s ease-out forwards';
         setTimeout(() => {
             energy2.style.animation = 'explode 1.2s ease-out forwards';
-        }, 300);
+        }, 200);
         let newElement = document.createElement('div');
         newElement.className = 'crackRight';
         newElement.id = 'crackRight';
@@ -184,10 +186,10 @@ socket.on('resetGame', (data) => {
     document.getElementById('powerBtn').disabled = false;
     document.getElementById('tapBtn').style.display = 'inline';
     document.getElementById('powerBtn').style.display = 'inline';
-    if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
-    if(document.getElementById('crackRight')) document.getElementById('crackRight').remove();
     energy1.style.animation = 'glowing1 2s ease-in-out infinite';
     energy2.style.animation = 'glowing2 2s ease-in-out infinite';
+    if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
+    if(document.getElementById('crackRight')) document.getElementById('crackRight').remove();
     
     resetTimer();
     intervalId = setInterval(updateElapsedTime, 1000);
@@ -218,8 +220,13 @@ document.getElementById('powerBtn').addEventListener('click', () => {
 
 document.getElementById('rematch').addEventListener('click', () => {
     socket.emit('findNewOpponent');
-    energy1.style.animation = 'glowing1 2s ease-in-out infinite';
-    energy2.style.animation = 'glowing2 2s ease-in-out infinite';
+    // energy1.style.animation = 'glowing1 2s ease-in-out infinite';
+    // energy2.style.animation = 'glowing2 2s ease-in-out infinite';
+    document.getElementById('status').textContent = 'Waiting for opponent...';
+    document.getElementById('status').style.textShadow = 'none';
+    document.getElementById('rematch').style.display = 'none';
+    if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
+    if(document.getElementById('crackRight')) document.getElementById('crackRight').remove();
 });
 
 document.getElementById('rematchSameBtn').addEventListener('click', () => {
