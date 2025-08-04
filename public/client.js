@@ -1,5 +1,5 @@
 const socket = io();
-let debugMode = true;
+let debugMode = false;
 let room = null;
 let role = null;
 let startTime = Date.now();
@@ -90,13 +90,13 @@ function updateVisuals(state) {
         energy2.style.transform = `scale(${1 + myScaler})`;
         if(myPlayer.boostState && energy2.style.animation !== 'boost2 2s ease-in-out infinite'){
             energy2.style.animation = 'boost2 2s ease-in-out infinite';
-        }else if(energy2.style.animation !== 'glowing2 2s ease-in-out infinite'){
+        }else if(!myPlayer.boostState && energy2.style.animation !== 'glowing2 2s ease-in-out infinite'){
             energy2.style.animation = 'glowing2 2s ease-in-out infinite';
         }
         
         if(opponentPlayer.boostState && energy1.style.animation !== 'boost1 2s ease-in-out infinite'){
             energy1.style.animation = 'boost1 2s ease-in-out infinite';
-        }else if(energy1.style.animation !== 'glowing1 2s ease-in-out infinite'){
+        }else if(!opponentPlayer.boostState && energy1.style.animation !== 'glowing1 2s ease-in-out infinite'){
             energy1.style.animation = 'glowing1 2s ease-in-out infinite';
         }
         
@@ -107,13 +107,13 @@ function updateVisuals(state) {
 
         if(myPlayer.boostState && energy1.style.animation !== 'boost1 2s ease-in-out infinite'){
             energy1.style.animation = 'boost1 2s ease-in-out infinite';
-        }else if(energy1.style.animation !== 'glowing1 2s ease-in-out infinite'){
+        }else if(!myPlayer.boostState && energy1.style.animation !== 'glowing1 2s ease-in-out infinite'){
             energy1.style.animation = 'glowing1 2s ease-in-out infinite';
         }
         
         if(opponentPlayer.boostState && energy2.style.animation !== 'boost2 2s ease-in-out infinite'){
             energy2.style.animation = 'boost2 2s ease-in-out infinite';
-        }else if(energy2.style.animation !== 'glowing2 2s ease-in-out infinite'){
+        }else if(!opponentPlayer.boostState && energy2.style.animation !== 'glowing2 2s ease-in-out infinite'){
             energy2.style.animation = 'glowing2 2s ease-in-out infinite';
         }
     }
