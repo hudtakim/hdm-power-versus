@@ -61,54 +61,58 @@ io.on('connection', (socket) => {
         const opponentId = playerIds.find(id => id !== socket.id);
         const opponent = rooms[room].players[opponentId];
         
-        if (player.role === 'Player 1') {
-            rooms[room].pos += player.step;
-        } else {
-            rooms[room].pos -= player.step;
-        }
-
-        if(player.boostState && player.step > baseStep + player.scaler - baseScaler - player.reducer){ //reduce to base + current scale
-            player.step -= (((player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100) / 10) * (player.scaler/baseScaler));
-        }
-        if(player.step <= baseStep + player.scaler - baseScaler - player.reducer){
-            player.boostState = false;
-            player.step = baseStep + player.scaler - baseScaler - player.reducer;
-        }
-
-        player.tapCount++;
-
-        opponent.boost += ((baseStep + player.scaler - baseScaler - player.reducer) * 0.01);
-
+        if (rooms[room].pos > 0 && rooms[room].pos < 100) {
+            if (player.role === 'Player 1') {
+                rooms[room].pos += player.step;
+            } else {
+                rooms[room].pos -= player.step;
+            }
         
-        // Cek kondisi game over
-        if (rooms[room].pos <= 0 || rooms[room].pos >= 100) {
-            let winnerId = null; // Inisialisasi winnerId
 
-            if (rooms[room].pos <= 0) {
-                // Jika pos <= 0, pemenangnya adalah Player 2
-                for (const playerId in rooms[room].players) {
-                    if (rooms[room].players[playerId].role === 'Player 2') {
-                        winnerId = playerId;
-                        break;
-                    }
-                }
-            } else if (rooms[room].pos >= 100) {
-                // Jika pos >= 100, pemenangnya adalah Player 1
-                for (const playerId in rooms[room].players) {
-                    if (rooms[room].players[playerId].role === 'Player 1') {
-                        winnerId = playerId;
-                        break;
-                    }
-                }
+            if(player.boostState && player.step > baseStep + player.scaler - baseScaler - player.reducer){ //reduce to base + current scale
+                player.step -= (((player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100) / 10) * (player.scaler/baseScaler));
+            }
+            if(player.step <= baseStep + player.scaler - baseScaler - player.reducer){
+                player.boostState = false;
+                player.step = baseStep + player.scaler - baseScaler - player.reducer;
             }
 
-            io.to(room).emit('gameOver', { 
-                state: rooms[room],
-                winnerId: winnerId 
-            });
-            //delete rooms[room]; 
-        } else {
+            player.tapCount++;
+
+            opponent.boost += ((baseStep + player.scaler - baseScaler - player.reducer) * 0.02);
+
             io.to(room).emit('updateGame', { state: rooms[room] });
+            //delete rooms[room]; 
+
+        }else{
+        // Cek kondisi game over
+            if (rooms[room].pos <= 0 || rooms[room].pos >= 100) {
+                let winnerId = null; // Inisialisasi winnerId
+
+                if (rooms[room].pos <= 0) {
+                    // Jika pos <= 0, pemenangnya adalah Player 2
+                    for (const playerId in rooms[room].players) {
+                        if (rooms[room].players[playerId].role === 'Player 2') {
+                            winnerId = playerId;
+                            break;
+                        }
+                    }
+                } else if (rooms[room].pos >= 100) {
+                    // Jika pos >= 100, pemenangnya adalah Player 1
+                    for (const playerId in rooms[room].players) {
+                        if (rooms[room].players[playerId].role === 'Player 1') {
+                            winnerId = playerId;
+                            break;
+                        }
+                    }
+                }
+
+                io.to(room).emit('gameOver', { 
+                    state: rooms[room],
+                    winnerId: winnerId 
+                });
+
+            }
         }
     });
 
