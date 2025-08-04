@@ -57,6 +57,9 @@ io.on('connection', (socket) => {
         if (!rooms[room]) return;
 
         const player = rooms[room].players[socket.id];
+        const playerIds = room.split('#');
+        const opponentId = playerIds.find(id => id !== socket.id);
+        const opponent = rooms[room].players[opponentId];
         
         if (player.role === 'Player 1') {
             rooms[room].pos += player.step;
@@ -74,12 +77,7 @@ io.on('connection', (socket) => {
 
         player.tapCount++;
 
-
-        const playerIds = room.split('#');
-        const opponentId = playerIds.find(id => id !== socket.id);
-        const opponent = rooms[room].players[opponentId];
-
-        opponent.boost += 0.02;
+        opponent.boost += (baseStep + player.scaler - baseScaler) * 0.01;
 
         
         // Cek kondisi game over
