@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
 
             player.tapCount++;
 
-            opponent.boost += ((baseStep + player.scaler - baseScaler - player.reducer) * 0.02);
+            opponent.boost += ((baseStep + player.scaler - baseScaler - player.reducer) * 0.015);
 
             io.to(room).emit('updateGame', { state: rooms[room] });
             //delete rooms[room]; 
