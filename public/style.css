@@ -35,7 +35,6 @@ body {
   height: 30px;
   border-radius: 50%;
   position: absolute;
-  transform: translateY(-50%);
 }
 
 #energy1 {
