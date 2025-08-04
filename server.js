@@ -68,7 +68,7 @@ io.on('connection', (socket) => {
         }
 
         if(player.boostState && player.step > baseStep + player.scaler - baseScaler - player.reducer){ //reduce to base + current scale
-            player.step -= ((player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100) / 10);
+            player.step -= (((player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100) / 10) * (player.scaler/baseScaler));
         }
         if(player.step <= baseStep + player.scaler - baseScaler - player.reducer){
             player.boostState = false;
