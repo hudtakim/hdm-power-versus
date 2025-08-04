@@ -77,7 +77,7 @@ function updateVisuals(state) {
         tapCount = myPlayer.tapCount;
         myScaler = myPlayer.scaler;
         document.getElementById('tapCount').textContent = tapCount;
-        if(myPlayer.boost > 1 && !myPlayer.boostState){ //need 50 tap from opponent to achieve this
+        if(myPlayer.boost >= 1.1 && !myPlayer.boostState){ //need 50 tap from opponent to achieve this
             document.getElementById('boostBtn').disabled = false;
         }
         document.getElementById('boostBtn').textContent = `Boost (X${roundDownToOneDecimal(myPlayer.boost)})`;
