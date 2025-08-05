@@ -1,5 +1,5 @@
 const socket = io();
-let debugMode = true;
+let debugMode = false;
 let room = null;
 let role = null;
 let startTime = Date.now();
@@ -53,11 +53,17 @@ function resetTimer() {
     document.getElementById("elapsed").textContent = "00:00:00";
 }
 
-function roundDownToOneDecimal(number) {
+function roundDownToOneDecimal(number, isBoostActive) {
   // Multiply by 10 to shift the first decimal digit to the left.
   const multiplied = number * 10;
   const floored = Math.floor(multiplied);
-  const result = floored / 10;
+  let result = floored / 10;
+
+  // If boost is active and result is less than 1.1, set it to 1.1
+  if (isBoostActive && result < 1.1) {
+    result = 1.1;
+  }
+
   return result;
 }
 
@@ -81,7 +87,7 @@ function updateVisuals(state) {
         if(myPlayer.boost >= 1.1 && !myPlayer.boostState){ //if boost > 1.1x and boostState false
             document.getElementById('boostBtn').disabled = false;
         }
-        document.getElementById('boostBtn').textContent = `Boost (X${roundDownToOneDecimal(myPlayer.boost)})`;
+        document.getElementById('boostBtn').textContent = `Boost (x${roundDownToOneDecimal(myPlayer.boost, myPlayer.boostState)})`;
     }
     if (opponentPlayer) {
         opponentScaler = opponentPlayer.scaler;
