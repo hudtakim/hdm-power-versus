@@ -71,8 +71,13 @@ io.on('connection', (socket) => {
             let massScale = opponent.mass > 0 ? (player.mass + 1) / (opponent.mass + 1) : player.mass;
             const stepScale = player.step / opponent.step;
             const posScale = player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100;
-            opponent.boost += ((player.step - opponent.mass) * massScale * stepScale * posScale * 0.05);
-            //if(opponent.boost < 1) opponent.boost = 1;
+            const boostLimit = (-3.5 * opponent.scaler) + 24.5;
+            if(!opponent.boostState && opponent.boost <= boostLimit){
+                opponent.boost += ((player.step - opponent.mass) * massScale * stepScale * posScale * 0.05);
+            }
+            if(opponent.boost > boostLimit){
+                opponent.boost = boostLimit;
+            }
 
             if(player.boostState && (player.step > baseStep + player.scaler)){ //reduce to its normal step
                 //player.step -= (((player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100) * player.boost));
@@ -128,7 +133,7 @@ io.on('connection', (socket) => {
         const player = rooms[room].players[socket.id];
 
         const playerIds = room.split('#');
-        const opponentId = playerIds.find(id => id !== socket.id);
+        //const opponentId = playerIds.find(id => id !== socket.id);
         //const opponent = rooms[room].players[opponentId];
 
         if (player.scaler < maxScaler) {
