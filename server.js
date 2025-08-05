@@ -75,7 +75,7 @@ io.on('connection', (socket) => {
 
             if(player.boostState && (player.step > baseStep + player.scaler)){ //reduce to its normal step
                 //player.step -= (((player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100) * player.boost));
-                let posScale = player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100;
+                let posScale = player.role === 'Player 1' ? rooms[room].pos / 125 : (100 - rooms[room].pos) / 125;
                 player.step -= ((player.step - (baseStep + player.scaler)) * posScale);  
                 player.boost = player.step / (baseStep + player.scaler);
                 if(player.boost < 1) player.boost = 1;
