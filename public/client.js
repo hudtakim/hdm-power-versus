@@ -1,5 +1,5 @@
 const socket = io();
-let debugMode = false;
+let debugMode = true;
 let room = null;
 let role = null;
 let startTime = Date.now();
@@ -71,6 +71,7 @@ function updateVisuals(state) {
     pos = state.pos;
     energy1.style.left = `${pos}%`;
     energy2.style.right = `${100 - pos}%`;
+    
 
     // Memperbarui hitungan tap dan scaler
     if (myPlayer) {
@@ -87,6 +88,8 @@ function updateVisuals(state) {
     }
 
     if(role === 'Player 1'){
+        console.log('Player 1: ' + (myPlayer.step - opponentPlayer.mass));
+        console.log('Player 2: ' + (opponentPlayer.step - myPlayer.mass));
         if(myScaler > opponentScaler){
             energy1.style.zIndex = 10;
             energy2.style.zIndex = 1;
@@ -98,6 +101,8 @@ function updateVisuals(state) {
             energy2.style.zIndex = 1;
         }
     }else{
+        console.log('Player 2: ' + (myPlayer.step - opponentPlayer.mass));
+        console.log('Player 2: ' + (opponentPlayer.step - myPlayer.mass));
         if(myScaler > opponentScaler){
             energy1.style.zIndex = 1;
             energy2.style.zIndex = 10;

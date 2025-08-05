@@ -23,8 +23,8 @@ io.on('connection', (socket) => {
         rooms[room] = {
             pos: 50,
             players: {
-                [player1Id]: { id: player1Id, role: 'Player 1', step: baseStep, reducer: 0, scaler: baseScaler, tapCount: 0, boost: 1, boostState: false},
-                [player2Id]: { id: player2Id, role: 'Player 2', step: baseStep, reducer: 0, scaler: baseScaler, tapCount: 0, boost: 1, boostState: false}
+                [player1Id]: { id: player1Id, role: 'Player 1', step: baseStep, mass: 0, scaler: baseScaler, tapCount: 0, boost: 1, boostState: false},
+                [player2Id]: { id: player2Id, role: 'Player 2', step: baseStep, mass: 0, scaler: baseScaler, tapCount: 0, boost: 1, boostState: false}
             }
         };
     };
@@ -63,23 +63,23 @@ io.on('connection', (socket) => {
         
         if (rooms[room].pos > 0 && rooms[room].pos < 100) {
             if (player.role === 'Player 1') {
-                rooms[room].pos += player.step;
+                rooms[room].pos += (player.step - opponent.mass);
             } else {
-                rooms[room].pos -= player.step;
+                rooms[room].pos -= (player.step - opponent.mass);
             }
         
 
-            if(player.boostState && player.step > baseStep + player.scaler - baseScaler - player.reducer){ //reduce to base + current scale
+            if(player.boostState && player.step > baseStep + player.scaler - baseScaler){ //reduce to base + current scale
                 player.step -= (((player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100) / 10) * (player.scaler/baseScaler));
             }
-            if(player.step <= baseStep + player.scaler - baseScaler - player.reducer){
+            if(player.step <= baseStep + player.scaler - baseScaler){
                 player.boostState = false;
-                player.step = baseStep + player.scaler - baseScaler - player.reducer;
+                player.step = baseStep + player.scaler - baseScaler;
             }
 
             player.tapCount++;
 
-            opponent.boost += ((baseStep + player.scaler - baseScaler - player.reducer) * 0.015);
+            opponent.boost += ((baseStep + player.scaler - baseScaler - opponent.mass + (player.mass*3.5)) * 0.01);
 
             io.to(room).emit('updateGame', { state: rooms[room] });
             //delete rooms[room]; 
@@ -129,8 +129,9 @@ io.on('connection', (socket) => {
         if (player.scaler < maxScaler) {
             player.scaler = Math.min(maxScaler, player.scaler + 0.1);
             player.step = player.step + 0.1;
-            opponent.step = opponent.step > 0 ? opponent.step - 0.02 : 0;
-            opponent.reducer += (opponent.step > 0 ? 0.02 : 0);
+            player.mass += 0.02;
+            //opponent.step = opponent.step > 0 ? opponent.step - 0.02 : 0;
+            //opponent.reducer += (opponent.step > 0 ? 0.02 : 0);
         }
 
         io.to(room).emit('updateGame', { state: rooms[room] });
