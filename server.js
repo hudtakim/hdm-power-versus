@@ -61,12 +61,13 @@ io.on('connection', (socket) => {
         const opponent = rooms[room].players[opponentId];
         player.tapCount++;
 
-        if (player.role === 'Player 1') {
-            rooms[room].pos += (player.step - opponent.mass)/2;
-        } else {
-            rooms[room].pos -= (player.step - opponent.mass)/2;
-        }
-        
+        if (rooms[room].pos > 0 && rooms[room].pos < 100) {
+            if (player.role === 'Player 1') {
+                rooms[room].pos += (player.step - opponent.mass)/2;
+            } else {
+                rooms[room].pos -= (player.step - opponent.mass)/2;
+            }
+        }        
         if (rooms[room].pos > 0 && rooms[room].pos < 100) {
             let massScale = opponent.mass > 0 ? (player.mass + 1) / (opponent.mass + 1) : player.mass;
             const stepScale = player.step / opponent.step;
