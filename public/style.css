@@ -63,11 +63,41 @@ body {
   }
 }
 
+.energy-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .energy {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   position: absolute;
+  z-index: 2;
+}
+
+.aura {
+  position: absolute;
+  z-index: 1;
+  height: 80px;
+  width: 80px;
+  opacity: 0;
+}
+
+.aura img{
+  height: -webkit-fill-available;
+}
+
+#aura1 {
+  left: calc(100% - 46px);
+  filter: hue-rotate(310deg);
+}
+
+#aura2 {
+  right: calc(100% - 46px);
+  transform: scaleX(-1);
+  filter: hue-rotate(0deg);
 }
 
 #energy1 {
@@ -135,20 +165,20 @@ button {
         border: 1px solid red;
         box-sizing: border-box;
         box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
-                    0 0 20px 10px #9932cc;
+                    0 0 20px 4px #9932cc;
     }
     50% {
         border: 1px solid red;
         box-sizing: border-box;
         box-shadow: 0 0 20px 15px #860404,   /* Cahaya membesar: biru muda */
-                    0 0 60px 45px #9932cc,
+                    0 0 40px 16px #9932cc,
                     0 0 80px 24px #da70d6; /* Tambahan cahaya warna lain */
     }
     100% {
         border: 1px solid red;
         box-sizing: border-box;
         box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
-                    0 0 20px 10px #9932cc;
+                    0 0 20px 4px #9932cc;
     }
 }
 
@@ -158,20 +188,20 @@ button {
         border: 1px solid red;
         box-sizing: border-box;
         box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
-                    0 0 20px 10px #1976d2;  /* Biru sedang */
+                    0 0 20px 4px #1976d2;  /* Biru sedang */
     }
     50% {
         border: 1px solid red;
         box-sizing: border-box;
         box-shadow: 0 0 20px 15px #860404,   /* Cahaya membesar: biru muda */
-                    0 0 60px 45px #1976d2,  /* Biru sedang */
+                    0 0 40px 16px #1976d2,  /* Biru sedang */
                     0 0px 80px 24px #1976d2;/* Tambahan cahaya warna biru sangat terang */
     }
     100% {
         border: 1px solid red;
         box-sizing: border-box;
         box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
-                    0 0 20px 10px #1976d2;  /* Biru sedang */
+                    0 0 20px 4px #1976d2;  /* Biru sedang */
     }
 }
 

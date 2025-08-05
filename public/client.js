@@ -14,6 +14,8 @@ let opponentScaler = 0.2;
 let arena = document.getElementById('arena');
 let energy1 = document.getElementById('energy1');
 let energy2 = document.getElementById('energy2');
+let aura1 = document.getElementById('aura1');
+let aura2 = document.getElementById('aura2');
 
 function startRematchCountdown(rematchBtn) {
     let countdown = 3;
@@ -77,6 +79,17 @@ function updateVisuals(state) {
     pos = state.pos;
     energy1.style.left = `${pos}%`;
     energy2.style.right = `${100 - pos}%`;
+    let auraPosReducer1 =  14;
+    let auraPosReducer2 =  14;
+    if(myPlayer.role === 'Player 1'){
+        auraPosReducer2 = (8.8 * myPlayer.scaler) - 14;
+        auraPosReducer1 = (8.8 * opponentPlayer.scaler) - 14; 
+    }else{
+        auraPosReducer2 = (8.8 * opponentPlayer.scaler) - 14;
+        auraPosReducer1 = (8.8 * myPlayer.scaler) - 14; 
+    }
+    aura1.style.left = `calc(${pos}% + ${auraPosReducer1}px)`;
+    aura2.style.right = `calc(${100 - pos}% + ${auraPosReducer2}px`;
     
 
     // Memperbarui hitungan tap dan scaler
@@ -98,9 +111,9 @@ function updateVisuals(state) {
         console.log('Player 2: ' + (opponentPlayer.step - myPlayer.mass));
         if(myScaler > opponentScaler){
             energy1.style.zIndex = 10;
-            energy2.style.zIndex = 1;
+            energy2.style.zIndex = 2;
         }else if(myScaler < opponentScaler){
-            energy1.style.zIndex = 1;
+            energy1.style.zIndex = 2;
             energy2.style.zIndex = 10;
         }else{
             energy1.style.zIndex = 1;
@@ -110,14 +123,14 @@ function updateVisuals(state) {
         console.log('Player 2: ' + (myPlayer.step - opponentPlayer.mass));
         console.log('Player 2: ' + (opponentPlayer.step - myPlayer.mass));
         if(myScaler > opponentScaler){
-            energy1.style.zIndex = 1;
+            energy1.style.zIndex = 2;
             energy2.style.zIndex = 10;
         }else if(myScaler < opponentScaler){
             energy1.style.zIndex = 10;
-            energy2.style.zIndex = 1;
+            energy2.style.zIndex = 2;
         }else{
-            energy1.style.zIndex = 1;
-            energy2.style.zIndex = 1;
+            energy1.style.zIndex = 2;
+            energy2.style.zIndex = 2;
         }
     }
     
@@ -125,33 +138,46 @@ function updateVisuals(state) {
     if (role === 'Player 1') {
         energy1.style.transform = `scale(${1 + opponentScaler})`;
         energy2.style.transform = `scale(${1 + myScaler})`;
-        if(myPlayer.boostState && energy2.style.animation !== 'boost2 2s ease-in-out infinite'){
+        aura1.style.transform = `scale(${1 + opponentScaler})`;
+        aura2.style.transform = `scale(${1 + myScaler})`;
+
+        if(myPlayer.boostState){ //&& aura2.style.animation !== 'boost2 2s ease-in-out infinite'){
             energy2.style.animation = 'boost2 2s ease-in-out infinite';
+            aura2.style.opacity = myPlayer.boostOpacity + ''; //'0.9';
         }else if(!myPlayer.boostState && energy2.style.animation !== 'glowing2 2s ease-in-out infinite'){
             energy2.style.animation = 'glowing2 2s ease-in-out infinite';
+            aura2.style.opacity = '0';
         }
         
-        if(opponentPlayer.boostState && energy1.style.animation !== 'boost1 2s ease-in-out infinite'){
+        if(opponentPlayer.boostState){// && energy1.style.animation !== 'boost1 2s ease-in-out infinite'){
             energy1.style.animation = 'boost1 2s ease-in-out infinite';
+            aura1.style.opacity = opponentPlayer.boostOpacity + ''; //'0.9';
         }else if(!opponentPlayer.boostState && energy1.style.animation !== 'glowing1 2s ease-in-out infinite'){
             energy1.style.animation = 'glowing1 2s ease-in-out infinite';
+            aura1.style.opacity = '0';
         }
         
        // energy2.style.animation = 'boost2 2s ease-in-out infinite';
     } else { // Player 2
         energy1.style.transform = `scale(${1 + myScaler})`;
         energy2.style.transform = `scale(${1 + opponentScaler})`;
+        aura1.style.transform = `scale(${1 + myScaler})`;
+        aura2.style.transform = `scale(${1 + opponentScaler})`;
 
-        if(myPlayer.boostState && energy1.style.animation !== 'boost1 2s ease-in-out infinite'){
+        if(myPlayer.boostState){// && energy1.style.animation !== 'boost1 2s ease-in-out infinite'){
             energy1.style.animation = 'boost1 2s ease-in-out infinite';
+            aura1.style.opacity = myPlayer.boostOpacity + ''; //'0.9';
         }else if(!myPlayer.boostState && energy1.style.animation !== 'glowing1 2s ease-in-out infinite'){
             energy1.style.animation = 'glowing1 2s ease-in-out infinite';
+            aura1.style.opacity = '0';
         }
         
-        if(opponentPlayer.boostState && energy2.style.animation !== 'boost2 2s ease-in-out infinite'){
+        if(opponentPlayer.boostState){// && energy2.style.animation !== 'boost2 2s ease-in-out infinite'){
             energy2.style.animation = 'boost2 2s ease-in-out infinite';
+            aura2.style.opacity = opponentPlayer.boostOpacity + ''; //'0.9';
         }else if(!opponentPlayer.boostState && energy2.style.animation !== 'glowing2 2s ease-in-out infinite'){
             energy2.style.animation = 'glowing2 2s ease-in-out infinite';
+            aura2.style.opacity = '0';
         }
     }
 

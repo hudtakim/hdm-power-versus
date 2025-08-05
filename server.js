@@ -22,8 +22,8 @@ io.on('connection', (socket) => {
         rooms[room] = {
             pos: 50,
             players: {
-                [player1Id]: { id: player1Id, role: 'Player 1', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false},
-                [player2Id]: { id: player2Id, role: 'Player 2', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false}
+                [player1Id]: { id: player1Id, role: 'Player 1', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false, boostOpacity: 0},
+                [player2Id]: { id: player2Id, role: 'Player 2', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false, boostOpacity: 0}
             }
         };
     };
@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
             let massScale = opponent.mass > 0 ? (player.mass + 1) / (opponent.mass + 1) : player.mass;
             const stepScale = player.step / opponent.step;
             const posScale = player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100;
-            const boostLimit = (-3.5 * opponent.scaler) + 24.5;
+            const boostLimit = (-5 * opponent.scaler) + 35;
             if(!opponent.boostState && opponent.boost <= boostLimit){
                 opponent.boost += ((player.step - opponent.mass) * massScale * stepScale * posScale * 0.05);
             }
@@ -85,11 +85,13 @@ io.on('connection', (socket) => {
                 player.step -= ((player.step - (baseStep + player.scaler)) * posScale);  
                 player.boost = player.step / (baseStep + player.scaler);
                 if(player.boost < 1) player.boost = 1;
+                player.boostOpacity = player.boost > 1.9 ? 0.9 : (player.boost - 1 < 0.1 ? 0.1 : player.boost - 1);     
             }
 
             if(player.step <= baseStep + player.scaler){
                 player.step = baseStep + player.scaler;
                 player.boostState = false;    
+                player.boostOpacity = 0;
             }
 
             io.to(room).emit('updateGame', { state: rooms[room] });
@@ -154,6 +156,7 @@ io.on('connection', (socket) => {
         const player = rooms[room].players[socket.id];
         player.boostState = true;
         player.step *= player.boost;
+        player.boostOpacity = 1;
         //player.boost = 1;
 
         io.to(room).emit('updateGame', { state: rooms[room] });
