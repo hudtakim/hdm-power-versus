@@ -26,6 +26,7 @@ io.on('connection', (socket) => {
     const initGame = (room, player1Id, player2Id) => {
         rooms[room] = {
             pos: 50,
+            isGameOver: false,
             players: {
                 [player1Id]: { id: player1Id, role: 'Player 1', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false, boostOpacity: 0},
                 [player2Id]: { id: player2Id, role: 'Player 2', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false, boostOpacity: 0}
@@ -59,6 +60,11 @@ io.on('connection', (socket) => {
     // --- Menangani aksi 'tap' dari client ---
     socket.on('tap', (room) => {
         if (!rooms[room]) return;
+
+        if (rooms[room].isGameOver) {
+            //console.log(`Game in room ${room} is over. Tap ignored.`);
+            return;
+        }
 
         const player = rooms[room].players[socket.id];
         const playerIds = room.split('#');
@@ -134,6 +140,9 @@ io.on('connection', (socket) => {
                         }
                     }
                 }
+
+                    // Set status game over
+                rooms[room].isGameOver = true;  
 
                 io.to(room).emit('gameOver', { 
                     state: rooms[room],
