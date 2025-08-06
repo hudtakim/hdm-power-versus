@@ -231,7 +231,11 @@ button {
     }
 }
 
-.crackLeft {
+.crack{
+  opacity: 0;
+}
+
+#crackLeft {
   background-image: url('/crack-img.png');
   background-size: cover;
   width: 200px;
@@ -243,7 +247,7 @@ button {
   transform: scaleX(-1);
 }
 
-.crackRight {
+#crackRight {
   background-image: url('/crack-img.png');
   background-size: cover;
   width: 200px;

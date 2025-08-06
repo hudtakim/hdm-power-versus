@@ -63,9 +63,9 @@ io.on('connection', (socket) => {
         const playerIds = room.split('#');
         const opponentId = playerIds.find(id => id !== socket.id);
         const opponent = rooms[room].players[opponentId];
-        player.tapCount++;
 
         if (rooms[room].pos > 0 && rooms[room].pos < 100) {
+            player.tapCount++;
             if (player.role === 'Player 1') {
                 rooms[room].pos += (player.step - opponent.mass)/2;
                 if(rooms[room].pos < 15 && !player.boostState && player.boost >= 1.1){

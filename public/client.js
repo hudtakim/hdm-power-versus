@@ -202,12 +202,12 @@ socket.on('startGame', (data) => {
     room = data.room;
     role = data.role;
 
-    if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
-    if(document.getElementById('crackRight')) document.getElementById('crackRight').remove();
+    document.getElementById('crackLeft').style.opacity = 0;
+    document.getElementById('crackRight').style.opacity = 0;
     energy1.style.animation = 'glowing1 2s ease-in-out infinite';
     energy2.style.animation = 'glowing2 2s ease-in-out infinite';
-    aura1.style.animation = 'none';
-    aura2.style.animation = 'none';
+    // aura1.style.animation = 'none';
+    // aura2.style.animation = 'none';
     
     updateVisuals(data.state);
 
@@ -237,7 +237,7 @@ socket.on('gameOver', (data) => {
     startRematchCountdown(document.getElementById('rematchSameBtn'));
     let state = data.state;
     //let role = data.role;
-    updateVisuals(data.state);
+    updateVisuals(state);
 
     const myPlayer = state.players[socket.id];
     const opponentId = Object.keys(state.players).find(id => id !== socket.id);
@@ -259,44 +259,34 @@ socket.on('gameOver', (data) => {
     }
 
     // Menggunakan posisi akhir dari server untuk animasi
-    if (data.state.pos <= 0) {
-        if(myPlayer.role === 'Player 2' && myPlayer.boostState){
-            aura1.style.animation = 'auraGone 1s ease-in-out forwards';
-            aura2.style.opacity = '0';
-        }
-        if(myPlayer.role === 'Player 1' && myPlayer.boostState){
-            aura2.style.opacity = '0';
-            if(opponentPlayer.boostState) aura1.style.animation = 'auraGone 1s ease-in-out forwards';
-        }
-
+    if (state.pos <= 0) {
         energy2.style.animation = 'explode 1.2s ease-out forwards';
+        aura2.style.opacity = '0';
         setTimeout(() => {
             energy1.style.animation = 'explode 1.2s ease-out forwards';
+            aura1.style.opacity = '0';
         }, 200);
         let newElement = document.createElement('div');
-        newElement.className = 'crackLeft';
-        newElement.id = 'crackLeft';
-        newElement.style.transform = `scale(-${1 + avgScaler})`;
-        arena.appendChild(newElement);
-    } else if (data.state.pos >= 100) {
-        if(myPlayer.role === 'Player 1' && myPlayer.boostState){
-            aura2.style.animation = 'auraGone 1s ease-in-out forwards';
-            aura1.style.opacity = '0';
-        }
-        if(myPlayer.role === 'Player 2' && myPlayer.boostState){
-            aura1.style.opacity = '0';
-            if(opponentPlayer.boostState) aura2.style.animation = 'auraGone 1s ease-in-out forwards';
-        }
-
+        // newElement.className = 'crackLeft';
+        // newElement.id = 'crackLeft';
+        const crack = document.getElementById('crackLeft');
+        crack.style.transform = `scale(-${1 + avgScaler})`;
+        crack.style.opacity = 1;
+        //arena.appendChild(newElement);
+    } else if (state.pos >= 100) {
         energy1.style.animation = 'explode 1.2s ease-out forwards';
+        aura1.style.opacity = '0';
         setTimeout(() => {
             energy2.style.animation = 'explode 1.2s ease-out forwards';
+            aura2.style.opacity = '0';
         }, 200);
         let newElement = document.createElement('div');
-        newElement.className = 'crackRight';
-        newElement.id = 'crackRight';
-        newElement.style.transform = `scale(${1 + avgScaler})`;
-        arena.appendChild(newElement);
+        // newElement.className = 'crackRight';
+        // newElement.id = 'crackRight';
+        const crack = document.getElementById('crackRight');
+        crack.style.transform = `scale(-${1 + avgScaler})`;
+        crack.style.opacity = 1;
+        //arena.appendChild(newElement);
     }
 });
 
@@ -314,10 +304,10 @@ socket.on('resetGame', (data) => {
     document.getElementById('boostBtn').style.display = 'inline';
     energy1.style.animation = 'glowing1 2s ease-in-out infinite';
     energy2.style.animation = 'glowing2 2s ease-in-out infinite';
-    aura1.style.animation = 'none';
-    aura2.style.animation = 'none';
-    if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
-    if(document.getElementById('crackRight')) document.getElementById('crackRight').remove();
+    // aura1.style.animation = 'none';
+    // aura2.style.animation = 'none';
+    document.getElementById('crackLeft').style.opacity = 0;
+    document.getElementById('crackRight').style.opacity = 0;
     
     resetTimer();
     intervalId = setInterval(updateElapsedTime, 1000);
@@ -361,8 +351,8 @@ document.getElementById('rematch').addEventListener('click', () => {
     document.getElementById('status').textContent = 'Waiting for opponent...';
     document.getElementById('status').style.textShadow = 'none';
     document.getElementById('rematch').style.display = 'none';
-    if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
-    if(document.getElementById('crackRight')) document.getElementById('crackRight').remove();
+    document.getElementById('crackLeft').style.opacity = 0;
+    document.getElementById('crackRight').style.opacity = 0;
 });
 
 document.getElementById('rematchSameBtn').addEventListener('click', () => {
