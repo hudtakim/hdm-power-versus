@@ -266,9 +266,7 @@ socket.on('gameOver', (data) => {
             energy1.style.animation = 'explode 1.2s ease-out forwards';
             aura1.style.opacity = '0';
         }, 200);
-        let newElement = document.createElement('div');
-        // newElement.className = 'crackLeft';
-        // newElement.id = 'crackLeft';
+
         const crack = document.getElementById('crackLeft');
         crack.style.transform = `scale(-${1 + avgScaler})`;
         crack.style.opacity = 1;
@@ -280,11 +278,9 @@ socket.on('gameOver', (data) => {
             energy2.style.animation = 'explode 1.2s ease-out forwards';
             aura2.style.opacity = '0';
         }, 200);
-        let newElement = document.createElement('div');
-        // newElement.className = 'crackRight';
-        // newElement.id = 'crackRight';
+
         const crack = document.getElementById('crackRight');
-        crack.style.transform = `scale(-${1 + avgScaler})`;
+        crack.style.transform = `scale(${1 + avgScaler})`;
         crack.style.opacity = 1;
         //arena.appendChild(newElement);
     }
