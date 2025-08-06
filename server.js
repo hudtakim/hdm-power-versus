@@ -14,6 +14,10 @@ const rooms = {};
 const baseStep = 2;
 const maxScaler = 5;
 
+function GetBoostLimit(scaler){
+    return (-2 * scaler) + 15;
+} 
+
 io.on('connection', (socket) => {
     console.log('New client connected:', socket.id);
 
@@ -64,15 +68,25 @@ io.on('connection', (socket) => {
         if (rooms[room].pos > 0 && rooms[room].pos < 100) {
             if (player.role === 'Player 1') {
                 rooms[room].pos += (player.step - opponent.mass)/2;
+                if(rooms[room].pos < 15 && !player.boostState && player.boost >= 1.1){
+                    player.boostState = true;
+                    player.step *= player.boost;
+                    player.boostOpacity = 1;
+                }
             } else {
                 rooms[room].pos -= (player.step - opponent.mass)/2;
+                if(rooms[room].pos > 85 && !player.boostState && player.boost >= 1.1){
+                    player.boostState = true;
+                    player.step *= player.boost;
+                    player.boostOpacity = 1;
+                }
             }
         }        
         if (rooms[room].pos > 0 && rooms[room].pos < 100) {
             let massScale = opponent.mass > 0 ? (player.mass + 1) / (opponent.mass + 1) : player.mass;
             const stepScale = player.step / opponent.step;
             const posScale = player.role === 'Player 1' ? rooms[room].pos / 100 : (100 - rooms[room].pos) / 100;
-            const boostLimit = (-5 * opponent.scaler) + 35;
+            const boostLimit = GetBoostLimit(opponent.scaler);
             if(!opponent.boostState && opponent.boost <= boostLimit){
                 opponent.boost += ((player.step - opponent.mass) * massScale * stepScale * posScale * 0.05);
             }
@@ -85,8 +99,8 @@ io.on('connection', (socket) => {
                 player.step -= ((player.step - (baseStep + player.scaler)) * posScale);  
                 player.boost = player.step / (baseStep + player.scaler);
                 if(player.boost < 1) player.boost = 1;
-                player.boostOpacity = player.boost > 1.9 ? 0.9 : (player.boost - 1 < 0.1 ? 0.1 : player.boost - 1);     
-            }
+                player.boostOpacity = player.boost >= 2 ? 1 : (player.boost - 1 > 0.5 ? player.boost - 1 : 0.5);     
+            };
 
             if(player.step <= baseStep + player.scaler){
                 player.step = baseStep + player.scaler;
@@ -134,13 +148,16 @@ io.on('connection', (socket) => {
         if (!rooms[room]) return;
         
         const player = rooms[room].players[socket.id];
-
-        const playerIds = room.split('#');
+        //const playerIds = room.split('#');
         //const opponentId = playerIds.find(id => id !== socket.id);
         //const opponent = rooms[room].players[opponentId];
 
         if (player.scaler < maxScaler) {
             player.scaler = Math.min(maxScaler, player.scaler + 0.1);
+
+            const boostLimit = GetBoostLimit(player.scaler);
+            if(player.boost > boostLimit) player.boost = boostLimit;
+
             player.step += 0.1;
             player.mass += 0.02;
             //opponent.step = opponent.step > 0 ? opponent.step - 0.02 : 0;

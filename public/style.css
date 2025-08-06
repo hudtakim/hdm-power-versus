@@ -118,6 +118,7 @@ button {
   margin: 0 0.4rem;
   position: relative;
   z-index: 99999;
+  border: 2px solid gray;
 }
 
 #tapBtn:disabled, #powerBtn:disabled, #rematchSameBtn:disabled, #rematch:disabled, #boostBtn:disabled{
@@ -129,16 +130,16 @@ button {
 @keyframes glowing1 {
     0% {
         box-shadow: 0 0 5px 2px #8a2be2,   /* Cahaya awal */
-                    0 0 20px 4px #9932cc;
+                    0 0 10px 4px #9932cc;
     }
     50% {
-        box-shadow: 0 0 20px 8px #8a2be2,   /* Cahaya membesar di tengah animasi */
-                    0 0 40px 16px #9932cc,
-                    0 0 80px 24px #da70d6; /* Tambahan cahaya warna lain */
+        box-shadow: 0 0 8px 4px #8a2be2,   /* Cahaya membesar di tengah animasi */
+                    0 0 12px 8px #9932cc,
+                    0 0 16px 12px #da70d6; /* Tambahan cahaya warna lain */
     }
     100% {
         box-shadow: 0 0 5px 2px #8a2be2,   /* Kembali ke cahaya awal */
-                    0 0 20px 4px #9932cc;
+                    0 0 10px 4px #9932cc;
     }
 }
 
@@ -146,16 +147,16 @@ button {
 @keyframes glowing2 {
     0% {
         box-shadow: 0 0 5px 2px #42a5f5,   /* Cahaya awal: biru muda */
-                    0 0 20px 4px #1976d2;  /* Biru sedang */
+                    0 0 10px 4px #1976d2;  /* Biru sedang */
     }
     50% {
-        box-shadow: 0 0 20px 8px #42a5f5,   /* Cahaya membesar: biru muda */
-                    0 0 40px 16px #1976d2,  /* Biru sedang */
-                    0 0px 80px 24px #e3f2fd; /* Tambahan cahaya warna biru sangat terang */
+        box-shadow: 0 0 8px 4px #42a5f5,   /* Cahaya membesar: biru muda */
+                    0 0 12px 8px #1976d2,  /* Biru sedang */
+                    0 0 16px 12px #e3f2fd; /* Tambahan cahaya warna biru sangat terang */
     }
     100% {
         box-shadow: 0 0 5px 2px #42a5f5,   /* Kembali ke cahaya awal */
-                    0 0 20px 4px #1976d2;
+                    0 0 10px 4px #1976d2;
     }
 }
 
@@ -165,20 +166,20 @@ button {
         border: 1px solid red;
         box-sizing: border-box;
         box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
-                    0 0 20px 4px #9932cc;
+                    0 0 10px 4px #9932cc;
     }
     50% {
         border: 1px solid red;
         box-sizing: border-box;
-        box-shadow: 0 0 20px 15px #860404,   /* Cahaya membesar: biru muda */
-                    0 0 40px 16px #9932cc,
-                    0 0 80px 24px #da70d6; /* Tambahan cahaya warna lain */
+        box-shadow: 0 0 8px 6px #860404,   /* Cahaya membesar: biru muda */
+                    0 0 12px 10px #9932cc,
+                    0 0 16px 14px #da70d6; /* Tambahan cahaya warna lain */
     }
     100% {
         border: 1px solid red;
         box-sizing: border-box;
         box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
-                    0 0 20px 4px #9932cc;
+                    0 0 10px 4px #9932cc;
     }
 }
 
@@ -188,20 +189,20 @@ button {
         border: 1px solid red;
         box-sizing: border-box;
         box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
-                    0 0 20px 4px #1976d2;  /* Biru sedang */
+                    0 0 10px 4px #1976d2;  /* Biru sedang */
     }
     50% {
         border: 1px solid red;
         box-sizing: border-box;
-        box-shadow: 0 0 20px 15px #860404,   /* Cahaya membesar: biru muda */
-                    0 0 40px 16px #1976d2,  /* Biru sedang */
-                    0 0px 80px 24px #1976d2;/* Tambahan cahaya warna biru sangat terang */
+        box-shadow: 0 0 8px 6px #860404,   /* Cahaya membesar: biru muda */
+                    0 0 12px 10px #1976d2,  /* Biru sedang */
+                    0 0px 16px 14px #1976d2;/* Tambahan cahaya warna biru sangat terang */
     }
     100% {
         border: 1px solid red;
         box-sizing: border-box;
         box-shadow: 0 0 5px 2px #db0202,   /* Cahaya awal: biru muda */
-                    0 0 20px 4px #1976d2;  /* Biru sedang */
+                    0 0 10px 4px #1976d2;  /* Biru sedang */
     }
 }
 
@@ -251,4 +252,43 @@ button {
   position: absolute;
   top: 20%;
   right: -100px;
+}
+
+@keyframes auraGone {
+    0% {
+        opacity: 0.5;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    20% {
+        opacity: 0.7;
+    }
+    30% {
+        opacity: 0.8;
+    }
+    40% {
+        opacity: 0.9;
+    }
+    50% {
+        opacity: 1.0;
+    }
+    60% {
+        opacity: 0.8;
+    }
+    70% {
+        opacity: 0.6;
+    }
+    80% {
+        opacity: 0.4;
+    }
+    90% {
+        opacity: 0.2;
+    }
+    95% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 0;
+    }
 }

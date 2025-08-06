@@ -66,8 +66,14 @@ function roundDownToOneDecimal(number, isBoostActive) {
     result = 1.1;
   }
 
-  return result;
+  // Use toFixed(1) to format the number with one decimal place.
+  // The function will now return a string, not a number.
+  return result.toFixed(1);
 }
+
+function GetBoostLimit(scaler){
+    return (-2 * scaler) + 15;
+} 
 
 function updateVisuals(state) {
     // Cari data pemain kita dan lawan dari objek state
@@ -100,6 +106,14 @@ function updateVisuals(state) {
         if(myPlayer.boost >= 1.1 && !myPlayer.boostState){ //if boost > 1.1x and boostState false
             document.getElementById('boostBtn').disabled = false;
         }
+        if(myPlayer.boostState && document.getElementById('boostBtn').disabled === false){
+            document.getElementById('boostBtn').disabled = true;
+        }
+
+        const playerBoostLimit = GetBoostLimit(myPlayer.scaler);
+        const fillColor = myPlayer.role === 'Player 1' ? '#ff3f20' : '#963cdbff';
+        document.getElementById('boostBtn').style.background = `linear-gradient(to right, ${fillColor} ${100 * (myPlayer.boost-1) / (playerBoostLimit-1)}%, #f0f0f0 0%)`;
+        
         document.getElementById('boostBtn').textContent = `Boost (x${roundDownToOneDecimal(myPlayer.boost, myPlayer.boostState)})`;
     }
     if (opponentPlayer) {
@@ -107,8 +121,6 @@ function updateVisuals(state) {
     }
 
     if(role === 'Player 1'){
-        console.log('Player 1: ' + (myPlayer.step - opponentPlayer.mass));
-        console.log('Player 2: ' + (opponentPlayer.step - myPlayer.mass));
         if(myScaler > opponentScaler){
             energy1.style.zIndex = 10;
             energy2.style.zIndex = 2;
@@ -120,8 +132,6 @@ function updateVisuals(state) {
             energy2.style.zIndex = 1;
         }
     }else{
-        console.log('Player 2: ' + (myPlayer.step - opponentPlayer.mass));
-        console.log('Player 2: ' + (opponentPlayer.step - myPlayer.mass));
         if(myScaler > opponentScaler){
             energy1.style.zIndex = 2;
             energy2.style.zIndex = 10;
@@ -196,6 +206,8 @@ socket.on('startGame', (data) => {
     if(document.getElementById('crackRight')) document.getElementById('crackRight').remove();
     energy1.style.animation = 'glowing1 2s ease-in-out infinite';
     energy2.style.animation = 'glowing2 2s ease-in-out infinite';
+    aura1.style.animation = 'none';
+    aura2.style.animation = 'none';
     
     updateVisuals(data.state);
 
@@ -248,6 +260,15 @@ socket.on('gameOver', (data) => {
 
     // Menggunakan posisi akhir dari server untuk animasi
     if (data.state.pos <= 0) {
+        if(myPlayer.role === 'Player 2' && myPlayer.boostState){
+            aura1.style.animation = 'auraGone 1s ease-in-out forwards';
+            aura2.style.opacity = '0';
+        }
+        if(myPlayer.role === 'Player 1' && myPlayer.boostState){
+            aura2.style.opacity = '0';
+            if(opponentPlayer.boostState) aura1.style.animation = 'auraGone 1s ease-in-out forwards';
+        }
+
         energy2.style.animation = 'explode 1.2s ease-out forwards';
         setTimeout(() => {
             energy1.style.animation = 'explode 1.2s ease-out forwards';
@@ -258,6 +279,15 @@ socket.on('gameOver', (data) => {
         newElement.style.transform = `scale(-${1 + avgScaler})`;
         arena.appendChild(newElement);
     } else if (data.state.pos >= 100) {
+        if(myPlayer.role === 'Player 1' && myPlayer.boostState){
+            aura2.style.animation = 'auraGone 1s ease-in-out forwards';
+            aura1.style.opacity = '0';
+        }
+        if(myPlayer.role === 'Player 2' && myPlayer.boostState){
+            aura1.style.opacity = '0';
+            if(opponentPlayer.boostState) aura2.style.animation = 'auraGone 1s ease-in-out forwards';
+        }
+
         energy1.style.animation = 'explode 1.2s ease-out forwards';
         setTimeout(() => {
             energy2.style.animation = 'explode 1.2s ease-out forwards';
@@ -284,6 +314,8 @@ socket.on('resetGame', (data) => {
     document.getElementById('boostBtn').style.display = 'inline';
     energy1.style.animation = 'glowing1 2s ease-in-out infinite';
     energy2.style.animation = 'glowing2 2s ease-in-out infinite';
+    aura1.style.animation = 'none';
+    aura2.style.animation = 'none';
     if(document.getElementById('crackLeft')) document.getElementById('crackLeft').remove();
     if(document.getElementById('crackRight')) document.getElementById('crackRight').remove();
     
