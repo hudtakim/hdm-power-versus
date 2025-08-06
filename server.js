@@ -4,10 +4,7 @@ const socketIo = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
-    pingInterval: 5000,   // ping client setiap 5 detik
-    pingTimeout: 10000,    // timeout kalau tidak ada pong dalam 5 detik
-});
+const io = socketIo(server);
 
 
 app.use(express.static(__dirname + '/public'));
