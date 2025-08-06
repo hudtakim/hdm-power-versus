@@ -60,11 +60,7 @@ io.on('connection', (socket) => {
     // --- Menangani aksi 'tap' dari client ---
     socket.on('tap', (room) => {
         if (!rooms[room]) return;
-
-        if (rooms[room].isGameOver) {
-            //console.log(`Game in room ${room} is over. Tap ignored.`);
-            return;
-        }
+        if (rooms[room].isGameOver) return;
 
         const player = rooms[room].players[socket.id];
         const playerIds = room.split('#');
@@ -156,6 +152,7 @@ io.on('connection', (socket) => {
     // --- Menangani aksi 'power' dari client ---
     socket.on('power', (room) => {
         if (!rooms[room]) return;
+        if (rooms[room].isGameOver) return;
         
         const player = rooms[room].players[socket.id];
         //const playerIds = room.split('#');
@@ -180,6 +177,8 @@ io.on('connection', (socket) => {
         // --- Menangani aksi 'boost' dari client ---
     socket.on('boost', (room) => {
         if (!rooms[room]) return;
+        if (rooms[room].isGameOver) return;
+
         const player = rooms[room].players[socket.id];
         player.boostState = true;
         player.step *= player.boost;
