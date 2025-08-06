@@ -16,6 +16,8 @@ let energy1 = document.getElementById('energy1');
 let energy2 = document.getElementById('energy2');
 let aura1 = document.getElementById('aura1');
 let aura2 = document.getElementById('aura2');
+let playerSign1 = document.getElementById('playerSign1');
+let playerSign2 = document.getElementById('playerSign2');
 
 function startRematchCountdown(rematchBtn) {
     let countdown = 3;
@@ -213,9 +215,19 @@ socket.on('startGame', (data) => {
 
     document.getElementById('status').textContent = `${role} - Tap Fast!`;
     if(role === 'Player 1'){
-        document.getElementById('status').style.textShadow = '0 0 1px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #1976d2, 0 0 30px #1976d2, 0 0 40px #1976d2, 0 0 55px #1976d2, 0 0 75px #1976d2, 0px -5px 20px rgba(206,89,55,0)';
+        const playerTextShadow = '0 0 1px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #1976d2, 0 0 30px #1976d2, 0 0 40px #1976d2, 0 0 55px #1976d2, 0 0 75px #1976d2, 0px -5px 20px rgba(206,89,55,0)';
+        document.getElementById('status').style.textShadow = playerTextShadow;
+        playerSign1.textContent = 'Player 1 (You)';
+        playerSign2.textContent = 'Player 2 (Opponent)';
+        playerSign1.style.fontWeight = 600;
+        playerSign2.style.fontWeight = 400;
     }else{
-        document.getElementById('status').style.textShadow = '0 0 1px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #8a2be2, 0 0 30px #8a2be2, 0 0 40px #8a2be2, 0 0 55px #8a2be2, 0 0 75px #8a2be2, 0px -5px 20px rgba(206,89,55,0)';
+        const playerTextShadow = '0 0 1px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #8a2be2, 0 0 30px #8a2be2, 0 0 40px #8a2be2, 0 0 55px #8a2be2, 0 0 75px #8a2be2, 0px -5px 20px rgba(206,89,55,0)';
+        document.getElementById('status').style.textShadow = playerTextShadow;
+        playerSign1.textContent = 'Player 1 (Opponent)';
+        playerSign2.textContent = 'Player 2 (You)';
+        playerSign1.style.fontWeight = 400;
+        playerSign2.style.fontWeight = 600;
     }
 
     document.getElementById('rematch').style.display = 'none';

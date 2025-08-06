@@ -14,12 +14,28 @@ body {
   height: 100vh;
 }
 
+.playerSignSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 15px 0 15px;
+  font-size: large;
+}
+
+#playerSign1 {
+  text-shadow: 0 0 1px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #1976d2, 0 0 30px #1976d2, 0 0 40px #1976d2, 0 0 55px #1976d2, 0 0 75px #1976d2, 0px -5px 20px rgba(206,89,55,0);
+}
+
+#playerSign2 {
+  text-shadow: 0 0 1px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #8a2be2, 0 0 30px #8a2be2, 0 0 40px #8a2be2, 0 0 55px #8a2be2, 0 0 75px #8a2be2, 0px -5px 20px rgba(206,89,55,0);
+}
+
 #arena {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 300px;
-  margin: 40px 15px;
+  margin: 20px 15px 40px 15px;
   position: relative;
   background-color: gainsboro;
 }
