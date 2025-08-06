@@ -330,7 +330,7 @@ socket.on('opponentLeft', () => {
 
 document.getElementById('tapBtn').addEventListener('click', () => {
     if (!room) return;
-    socket.emit('tap', room);
+    socket.compress(false).emit('tap', room);
 });
 
 document.getElementById('powerBtn').addEventListener('click', () => {
