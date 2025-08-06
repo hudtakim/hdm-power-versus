@@ -368,6 +368,10 @@ document.getElementById('rematchSameBtn').addEventListener('click', () => {
     socket.emit('rematchSame', room);
 });
 
+document.getElementById('instructionPopup').addEventListener('click', () => {
+    document.getElementById('instructionPopup').style.display = 'none';
+});
+
 
 if(!debugMode){
     document.addEventListener('contextmenu', event => event.preventDefault());

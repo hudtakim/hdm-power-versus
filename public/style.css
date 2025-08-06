@@ -1,5 +1,5 @@
 html{
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 body {
@@ -10,8 +10,22 @@ body {
   margin: 0;
   padding: 0;
   user-select: none;
-  overflow: hidden;
+  overflow-x: hidden;
   height: 100vh;
+  position: relative;
+}
+
+.instruction-popup{
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .playerSignSection {
@@ -312,3 +326,178 @@ button {
         opacity: 0;
     }
 }
+
+        /* Outer container for the instructions */
+        .game-instructions-container {
+           /* font-family: 'Press Start 2P', cursive; */ /* Game style font */
+            background-color: #2c2c54; /* Slightly lighter dark background for the box */
+            border: 5px solid #ff6b6b; /* Bright red border */
+            border-radius: 15px; /* Rounded corners */
+            padding: 10px 20px;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5); /* Glowing effect */
+            text-align: center;
+            box-sizing: border-box;
+            max-height: 90vh; /* Set a maximum height relative to viewport height */
+            overflow-x: hidden;
+            overflow-y: auto; /* Enable vertical scrolling if content overflows */
+            display: flex; /* Use flexbox for vertical stacking */
+            flex-direction: column;
+            gap: 20px; /* Gap between main sections (title, controls, tips) */
+            margin: 20px 15px;
+        }
+
+        /* Title styling */
+        .game-instructions-container h2 {
+            color: #ffe66d; /* Bright yellow for title */
+            font-size: clamp(0.8rem, 2vw, 2.5rem); /* Responsive font size */
+            margin-bottom: 0; /* Removed margin-bottom as gap handles spacing */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Wrapper for control sections to enable flexbox layout */
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column; /* Stack items vertically by default */
+            gap: 10px; /* Reduced space between list items */
+            padding: 0 10px; /* Slight horizontal padding for list appearance */
+        }
+
+        /* Section styling for each control - now more like a list item */
+        .control-section {
+            text-align: left;
+            padding: 10px 0; /* Minimal vertical padding */
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2); /* Subtle separator */
+        }
+
+        .control-section:last-of-type { /* Use last-of-type to target the last control section */
+            border-bottom: none; /* No border for the last item */
+            margin-bottom: 0;
+        }
+
+        .control-section h3 {
+            color: #6eff6e; /* Bright green for sub-titles */
+            font-size: clamp(1rem, 2.5vw, 1.8rem); /* Responsive font size */
+            margin-top: 0;
+            margin-bottom: 5px; /* Reduced margin */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        .control-section p {
+            font-size: clamp(0.7rem, 1.8vw, 1.1rem); /* Responsive font size */
+            line-height: 1.5;
+            margin-bottom: 5px; /* Reduced margin */
+            color: #c0c0c0; /* Slightly darker text for body */
+        }
+
+        .control-section p strong {
+            color: #fff; /* White for strong text */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .control-section ul {
+            list-style: none; /* Remove default bullet points */
+            padding-left: 15px; /* Indent list items */
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .control-section ul li {
+            position: relative;
+            padding-left: 15px; /* Space for custom bullet */
+            margin-bottom: 3px;
+            font-size: clamp(0.7rem, 1.8vw, 1.1rem);
+            color: #c0c0c0;
+        }
+
+        .control-section ul li::before {
+            content: '•'; /* Custom bullet point */
+            color: #00e6e6; /* Cyan bullet */
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Warning/Tip styling */
+        .warning-tip {
+            color: #ffcc00; /* Orange for warnings */
+            font-size: clamp(0.65rem, 1.6vw, 1rem);
+            margin-top: 10px;
+            padding-left: 8px;
+            border-left: 3px solid #ffcc00;
+        }
+
+        /* New styling for the separate Boost Energy Tips card */
+        .boost-energy-card {
+            background-color: #3b3b6b; /* Darker background, similar to old control sections */
+            border: 2px solid #00e6e6; /* Cyan border */
+            border-radius: 10px;
+            padding: 15px;
+            text-align: left;
+            box-shadow: 0 0 10px rgba(0, 230, 230, 0.5); /* Cyan glow */
+            margin-top: 10px; /* Space from the main controls */
+        }
+
+        .boost-energy-card h3 {
+            color: #00e6e6; /* Cyan for boost tips title */
+            font-size: clamp(1rem, 2.5vw, 1.8rem); /* Consistent font size with control titles */
+            margin-top: 0;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        .boost-energy-card p {
+            color: #c0c0c0;
+            font-size: clamp(0.7rem, 1.8vw, 1.1rem);
+            line-height: 1.5;
+            margin-bottom: 5px;
+        }
+
+        .boost-energy-card p strong {
+            color: #fff;
+        }
+
+        /* Media query for larger screens to arrange side-by-side */
+        @media (min-width: 768px) {
+            .controls-wrapper {
+                flex-direction: row; /* Arrange items horizontally */
+                flex-wrap: nowrap; /* Prevent wrapping if space allows */
+                justify-content: space-between; /* Distribute space evenly */
+                align-items: flex-start; /* Align items to the top */
+                gap: 20px; /* Gap between columns */
+            }
+
+            .control-section {
+                flex: 1; /* Allow sections to take equal width */
+                max-width: calc(33.33% - 14px); /* Approx 3 items per row with gap */
+                border-bottom: none; /* No border for side-by-side */
+            }
+
+            .control-section:not(:last-of-type) { /* Apply border-right to all but the last control section */
+                border-right: 1px dashed rgba(255, 255, 255, 0.2); /* Vertical separator between columns */
+                padding-right: 15px; /* Add padding for the separator */
+            }
+            .control-section:first-child {
+                padding-left: 0; /* Remove extra padding on first child */
+            }
+        }
+
+                /* Styling for the "TAP ANYWHERE" instruction */
+        .tap-anywhere-instruction {
+            color: #ff00ff; /* Bright magenta color */
+            font-size: clamp(1rem, 2.5vw, 2rem); /* Larger and responsive font size */
+            margin-top: 15px; /* Space above */
+            margin-bottom: 15px; /* Space below */
+            text-shadow: 0 0 8px rgba(255, 0, 255, 0.8); /* Glowing effect */
+            animation: pulse 1.5s infinite alternate; /* Simple pulsing animation */
+        }
+
+         @keyframes pulse {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }

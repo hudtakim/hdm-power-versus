@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HDM Power Versus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -30,13 +31,51 @@
     <button id="boostBtn" disabled>Boost</button>
     <button id="powerBtn" disabled>Charge</button>
     <button id="tapBtn" disabled>Push</button>
+    <button id="rematchSameBtn" style="display: none;">Rematch</button>
+    <button id="rematch" style="display: none">Find New Opponent</button>
   </div>
+  
+  <div class="instruction-popup" id="instructionPopup">
+   <div class="game-instructions-container">
+        <h2>Game Controls & Mechanics</h2>
 
-  <button id="rematchSameBtn" style="display: none;">Rematch</button>
-  <button id="rematch" style="display: none">Find New Opponent</button>
+        <div class="controls-wrapper">
+            <div class="control-section">
+                <h3>1. Push Button</h3>
+                <p>Tap to push the ball forward. The more <strong>power</strong> you have, the farther it goes!</p>
+            </div>
 
-  <div id="statistic">
-    
+            <div class="control-section">
+                <h3>2. Charge Button</h3>
+                <p>Hold to charge up your strength. Charging will:</p>
+                <ul>
+                    <li>Increase your <strong>push power</strong></li>
+                    <li>Grow your ball in <strong>size</strong></li>
+                </ul>
+                <p class="warning-tip">⚠️ <strong>Bigger balls are heavier and harder to push, but they hit harder!</strong></p>
+            </div>
+
+            <div class="control-section">
+                <h3>3. Boost Button</h3>
+                <p>Activate to <strong>multiply your push power!</strong></p>
+                <ul>
+                    <li>Press manually at any time</li>
+                    <li>Or it activates automatically when you're about to lose, as long as you have enough Boost Energy</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- New separate card for Boost Energy Tips -->
+        <div class="boost-energy-card">
+            <h3>⚡ Boost Energy Tips</h3>
+            <p>The bigger your ball, the <strong>less Boost Energy</strong> it can hold</p>
+            <p>Use your <strong>Boost wisely!</strong></p>
+        </div>
+
+               <!-- Instruction for tapping anywhere -->
+        <div class="tap-anywhere-instruction">
+            TAP ANYWHERE TO CLOSE
+        </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src="client.js"></script>
