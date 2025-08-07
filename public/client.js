@@ -250,6 +250,21 @@ function copy() {
     });
 }
 
+function resetArenaVisual(type='rematch'){
+    document.getElementById('status').textContent = 'Waiting for opponent...';
+    document.getElementById('status').style.textShadow = 'none';
+    document.getElementById('rematch').style.display = 'none';
+    document.getElementById('crackLeft').style.opacity = 0;
+    document.getElementById('crackRight').style.opacity = 0;
+    if(type === 'new'){
+        document.getElementById('rematchSameBtn').style.display = 'none';
+        playerSign1.textContent = 'Player 1';
+        playerSign2.textContent = 'Player 2';
+        playerSign1.style.fontWeight = 400;
+        playerSign2.style.fontWeight = 400;
+    }
+}
+
 function updateVisuals(state) {
     const myPlayer = state.players[socket.id];
     const opponentId = Object.keys(state.players).find(id => id !== socket.id);
@@ -379,11 +394,7 @@ document.getElementById('boostBtn').addEventListener('click', () => {
 
 document.getElementById('rematch').addEventListener('click', () => {
     if(socket) socket.emit('findNewOpponent');
-    document.getElementById('status').textContent = 'Waiting for opponent...';
-    document.getElementById('status').style.textShadow = 'none';
-    document.getElementById('rematch').style.display = 'none';
-    document.getElementById('crackLeft').style.opacity = 0;
-    document.getElementById('crackRight').style.opacity = 0;
+    resetArenaVisual();
 });
 
 document.getElementById('rematchSameBtn').addEventListener('click', () => {
@@ -423,6 +434,7 @@ document.getElementById('exitBtn').addEventListener('click', () => {
         socket.disconnect();
         socket = null;
     }
+    resetArenaVisual();
     document.getElementById('ingameWrapper').style.display = 'none';
     document.getElementById('landing').style.display = 'flex';
 });
