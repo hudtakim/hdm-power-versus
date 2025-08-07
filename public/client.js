@@ -434,7 +434,7 @@ document.getElementById('exitBtn').addEventListener('click', () => {
         socket.disconnect();
         socket = null;
     }
-    resetArenaVisual();
+    resetArenaVisual(type='new');
     document.getElementById('ingameWrapper').style.display = 'none';
     document.getElementById('landing').style.display = 'flex';
 });
