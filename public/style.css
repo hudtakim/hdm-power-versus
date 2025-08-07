@@ -15,13 +15,17 @@ body {
   position: relative;
 }
 
+.ingame-wrapper{
+  display: none;
+}
+
 .instruction-popup{
   position: absolute;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   z-index: 999999;
@@ -58,6 +62,12 @@ body {
   position: relative;
   width: 60px;
 
+}
+
+.room-id-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /*
 .energy-wrapper{
@@ -151,7 +161,7 @@ button {
   border: 2px solid gray;
 }
 
-#tapBtn:disabled, #powerBtn:disabled, #rematchSameBtn:disabled, #rematch:disabled, #boostBtn:disabled{
+#tapBtn:disabled, #powerBtn:disabled, #rematchSameBtn:disabled, #rematch:disabled, #boostBtn:disabled, #exitBtn:disabled{
   color: light-dark(rgba(16, 16, 16, 0.5), rgba(255, 255, 255, 0.5));
   background-color: light-dark(rgba(239, 239, 239, 0.7), rgba(19, 1, 1, 0.3)) !important;
 }
@@ -339,11 +349,11 @@ button {
             box-sizing: border-box;
             max-height: 90vh; /* Set a maximum height relative to viewport height */
             overflow-x: hidden;
-            overflow-y: auto; /* Enable vertical scrolling if content overflows */
+            overflow-y: auto !important; /* Enable vertical scrolling if content overflows */
             display: flex; /* Use flexbox for vertical stacking */
             flex-direction: column;
             gap: 20px; /* Gap between main sections (title, controls, tips) */
-            margin: 20px 15px;
+            margin: 40px 15px 20px 15px;
         }
 
         /* Title styling */
@@ -481,23 +491,17 @@ button {
             }
         }
 
-                /* Styling for the "TAP ANYWHERE" instruction */
-        .tap-anywhere-instruction {
-            color: #ff00ff; /* Bright magenta color */
-            font-size: clamp(1rem, 2.5vw, 2rem); /* Larger and responsive font size */
-            margin-top: 15px; /* Space above */
-            margin-bottom: 15px; /* Space below */
-            text-shadow: 0 0 8px rgba(255, 0, 255, 0.8); /* Glowing effect */
-            animation: pulse 1.5s infinite alternate; /* Simple pulsing animation */
+        /* Gaya untuk teks "Tap anywhere to close" */
+        .tap-text {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8); /* Warna teks abu-abu terang */
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Efek glow ringan pada teks */
+            animation: pulse 2s infinite ease-in-out; /* Animasi berkedip */
         }
 
-         @keyframes pulse {
-            from {
-                transform: scale(1);
-                opacity: 1;
-            }
-            to {
-                transform: scale(1.05);
-                opacity: 0.8;
-            }
+        /* Animasi berkedip untuk teks */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
         }

@@ -22,40 +22,100 @@ function GetBoostLimit(scaler){
 io.on('connection', (socket) => {
     console.log('New client connected:', socket.id);
 
-    // Function to initialize or reset a game room
+            // Function to initialize or reset a game room
     const initGame = (room, player1Id, player2Id) => {
         rooms[room] = {
             pos: 50,
             isGameOver: false,
             players: {
-                [player1Id]: { id: player1Id, role: 'Player 1', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false, boostOpacity: 0},
-                [player2Id]: { id: player2Id, role: 'Player 2', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false, boostOpacity: 0}
+                [player1Id]: { id: player1Id, role: 'Player 1', username:'', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false, boostOpacity: 0},
+                [player2Id]: { id: player2Id, role: 'Player 2', username:'', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false, boostOpacity: 0}
             }
         };
     };
 
-    // --- Pemain mencari lawan dan memulai game ---
-    if (waitingPlayer) {
-        const room = `${waitingPlayer.id}#${socket.id}`;
+    socket.on('joinRoom', (data) => {
+        //const username = data.username; // Simpan username di objek socket
+        let roomId = data?.roomId
+        // --- Pemain mencari lawan dan memulai game ---
+        if (roomId) {
+            // Bergabung ke room dengan ID spesifik
+            const room = rooms[roomId];
+            if (room && room.isWaiting) {
+                const player1Id = Object.keys(room.players)[0];
+                const player2Id = socket.id;
+                // Hapus room lama dengan ID sederhana
+                delete rooms[roomId];
+
+                // Buat ID room baru dengan format yang konsisten
+                const newRoomId = `${player1Id}#${player2Id}`;
+
+                // Player 1 (creator) dan Player 2 (joiner) bergabung ke room baru
+                socket.join(newRoomId);
+                io.sockets.sockets.get(player1Id)?.join(newRoomId);
+
+                // Inisialisasi game dengan ID room baru
+                initGame(newRoomId, player1Id, player2Id);
+
+                // Mengirimkan event 'startGame' ke kedua pemain
+                io.to(player1Id).emit('startGame', {
+                    room: newRoomId,
+                    role: rooms[newRoomId].players[player1Id].role,
+                    state: rooms[newRoomId],
+                    status: 'creator'
+                });
+                io.to(player2Id).emit('startGame', {
+                    room: newRoomId,
+                    role: rooms[newRoomId].players[player2Id].role,
+                    state: rooms[newRoomId],
+                    status: 'visitor',
+                    roomId: data?.roomId
+                });
+                //console.log(`Joined room ${roomId}. Game started!`);
+            } else {
+                socket.emit('roomNotFound', { message: 'Room not found or already full.' });
+            }
+        } else {
+            if (waitingPlayer) {
+                const room = `${waitingPlayer.id}#${socket.id}`;
+                socket.join(room);
+                waitingPlayer.join(room);
+
+                initGame(room, waitingPlayer.id, socket.id);
+
+                io.to(waitingPlayer.id).emit('startGame', {
+                    room,
+                    role: rooms[room].players[waitingPlayer.id].role,
+                    state: rooms[room]
+                });
+                io.to(socket.id).emit('startGame', {
+                    room,
+                    role: rooms[room].players[socket.id].role,
+                    state: rooms[room]
+                });
+                waitingPlayer = null;
+            } else {
+                waitingPlayer = socket;
+            }
+        }
+    });
+
+    // --- Pemain membuat room baru ---
+    socket.on('createRoom', () => {
+       // const username = data.username;
+        const room = socket.id;
         socket.join(room);
-        waitingPlayer.join(room);
-
-        initGame(room, waitingPlayer.id, socket.id);
-
-        io.to(waitingPlayer.id).emit('startGame', {
-            room,
-            role: rooms[room].players[waitingPlayer.id].role,
-            state: rooms[room]
-        });
-        io.to(socket.id).emit('startGame', {
-            room,
-            role: rooms[room].players[socket.id].role,
-            state: rooms[room]
-        });
-        waitingPlayer = null;
-    } else {
-        waitingPlayer = socket;
-    }
+        rooms[room] = {
+            players: {
+                [socket.id]: { id: socket.id, role: 'Player 1', username: '', step: baseStep, mass: 0, scaler: 0, tapCount: 0, boost: 1, boostState: false, boostOpacity: 0 }
+            },
+            isWaiting: true // Menandai room ini sedang menunggu pemain lain
+        };
+        
+        // Mengirimkan Room ID kembali ke klien yang membuat room
+        socket.emit('roomCreated', { roomId: room });
+        //console.log(`Room created with ID: ${room} by ${username}`);
+    });
 
     // --- Menangani aksi 'tap' dari client ---
     socket.on('tap', (room) => {
