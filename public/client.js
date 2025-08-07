@@ -1,4 +1,4 @@
-let debugMode = true;
+let debugMode = false;
 
 let socket = null;
 let room = null;
@@ -257,6 +257,8 @@ function resetArenaVisual(type='rematch'){
     document.getElementById('crackLeft').style.opacity = 0;
     document.getElementById('crackRight').style.opacity = 0;
     if(type === 'new'){
+        document.getElementById('roomId').textContent = '';
+        document.getElementById('rematch').style.display = 'none';
         document.getElementById('rematchSameBtn').style.display = 'none';
         playerSign1.textContent = 'Player 1';
         playerSign2.textContent = 'Player 2';
